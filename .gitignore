@@ -298,6 +298,7 @@ tmp-php.ini
 /.vscode
 /pool/
 /thirdparty
+/work
 /ext/redis
 /ext/memcached
 /ext/imagick

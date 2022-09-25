@@ -1,8 +1,9 @@
 # 步骤
 0. 清理 `brew` 安装的软件
-1. 编译所有依赖的库
-2. 配置 `./make.sh config`
-3. 构建 `./make.sh build`
+1. 执行 `git submodule update --init --recursive`
+2. 执行 `php prepare.php`
+3. 配置 `./make.sh config`
+4. 构建 `./make.sh build`
 
 
 ## 清理

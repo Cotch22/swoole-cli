@@ -1,3 +1,4 @@
 [submodule "ext/swoole"]
 	path = ext/swoole
 	url = https://github.com/swoole/swoole-src.git
+	branch = 4.8.x

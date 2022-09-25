@@ -7,24 +7,33 @@ use SwooleCli\Library;
 use SwooleCli\Extension;
 
 if (empty($argv[1])) {
-    $type = 'linux';
+    switch (PHP_OS) {
+        default:
+        case 'Linux':
+            $type = 'linux';
+            break;
+        case 'Darwin':
+            $type = 'macos';
+            break;
+        case 'WINNT':
+            $type = 'win';
+            break;
+    }
 } else {
     $type = trim($argv[1]);
 }
 
 $p = new Preprocessor(__DIR__);
-$p->setPhpSrcDir('/Users/sean/Documents/php-work/swoole-cli-4.x/php-7.4.30');
+$p->setPhpSrcDir('/Users/caozheyan/package/php-7.4.30');
 $p->setDockerVersion('1.4');
-$p->setSwooleDir('/home/htf/workspace/swoole');
+$p->setSwooleDir('/Users/caozheyan/package/swoole');
 
 $endCallback = function () {
 };
 
 if ($type == 'macos') {
-    define('WORKSPACE', '/Users/sean/Documents/php-work/swoole-cli-4.x');
-    // $p->setWorkDir(WORKSPACE . '/cli-swoole');
-    // $p->setExtraLdflags('-L/usr/lib -undefined dynamic_lookup -lwebp -licudata -licui18n -licuio');
-    $p->setWorkDir(WORKSPACE.'/swoole-cli');
+    define('WORKSPACE', '/Users/caozheyan/gitwonder/swoole-cli/work');
+    $p->setWorkDir(WORKSPACE);
     $p->setExtraLdflags('-L/usr/lib -framework CoreFoundation -framework SystemConfiguration -undefined dynamic_lookup -lwebp -licudata -licui18n -licuio');
     $endCallback = function($p) {
         $makesh = file_get_contents(__DIR__.'/make.sh');
@@ -113,6 +122,7 @@ function install_libmemcached(Preprocessor $p)
             ->withConfigure('./configure --prefix=/usr/libmemcached --enable-static --disable-shared')
             ->withLdflags('-L/usr/libmemcached/lib')
             ->withPkgConfig('/usr/libmemcached/lib/pkgconfig')
+            ->withLicense('https://imagemagick.org/script/license.php', Library::LICENSE_BSD)
     );
 }
 
@@ -133,7 +143,7 @@ function install_giflib(Preprocessor $p)
     $p->addLibrary(
         (new Library('giflib'))
             ->withUrl('https://nchc.dl.sourceforge.net/project/giflib/giflib-5.2.1.tar.gz')
-            ->withMakeOptions('libgif.a ')
+            ->withMakeOptions('libgif.a')
             ->withConfigure('patch -p0 < '.WORKSPACE."/swoole-cli/pool/lib/giflib.patch")
             ->withMakeInstallOptions("PREFIX=/usr")
             ->withLicense('http://giflib.sourceforge.net/intro.html', Library::LICENSE_SPEC)
@@ -354,6 +364,18 @@ function install_curl(Preprocessor $p)
     );
 }
 
+function install_grpc(Preprocessor $p)
+{
+    $p->addLibrary(
+        (new Library('grpc'))
+            ->withUrl('https://github.com/grpc/grpc/archive/refs/tags/v1.49.1.tar.gz')
+            ->withFile('grpc-1.49.1.tar.gz')
+            ->withConfigure("autoreconf -fi && ./configure --prefix=/usr --enable-static --disable-shared")
+            ->withLicense('https://github.com/grpc/grpc/blob/master/LICENSE', Library::LICENSE_APACHE2)
+            ->withHomePage('https://github.com/grpc/grpc/')
+    );
+}
+
 install_openssl($p);
 install_libiconv($p);
 install_libxml2($p);
@@ -378,6 +400,7 @@ install_imagemagick($p);
 install_curl($p);
 install_libsodium($p);
 install_libyaml($p);
+install_libmemcached($p);
 
 // ================================================================================================
 // PHP Extension
@@ -473,6 +496,14 @@ $extAvailabled = [
         $p->addExtension((new Extension('mongodb'))
             ->withOptions('--enable-mongodb')
             ->withPeclVersion('1.14.1'));
+    },
+    'grpc' => function ($p) {
+        $p->addExtension((new Extension('grpc'))
+            ->withOptions('--enable-grpc')
+            ->withPeclVersion('1.49.0')
+            ->withHomePage('https://github.com/grpc/grpc')
+            ->withLicense('https://github.com/grpc/grpc/blob/master/LICENSE', Library::LICENSE_APACHE2)
+        );
     }
 ];
 
@@ -484,6 +515,7 @@ $extEnabled = [
     'swoole',
     'yaml',
     'imagick',
+    'grpc',
     //'inotify',
     //'mongodb'
 ];

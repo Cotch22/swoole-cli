@@ -23,14 +23,14 @@ abstract class Project
         $this->name = $name;
     }
 
-    function withLicense(string $license, int $licenseType = self::LICENSE_SPEC): static
+    function withLicense(string $license, int $licenseType = self::LICENSE_SPEC)
     {
         $this->license = $license;
         $this->licenseType = $licenseType;
         return $this;
     }
 
-    function withHomePage(string $homePage): static
+    function withHomePage(string $homePage)
     {
         $this->homePage = $homePage;
         return $this;
@@ -49,55 +49,55 @@ class Library extends Project
     public string $pkgName = '';
     public string $prefix = '/usr/local';
 
-    function withUrl(string $url): static
+    function withUrl(string $url)
     {
         $this->url = $url;
         return $this;
     }
 
-    function withPrefix(string $prefix): static
+    function withPrefix(string $prefix)
     {
         $this->prefix = $prefix;
         return $this;
     }
 
-    function withFile(string $file): static
+    function withFile(string $file)
     {
         $this->file = $file;
         return $this;
     }
 
-    function withConfigure(string $configure): static
+    function withConfigure(string $configure)
     {
         $this->configure = $configure;
         return $this;
     }
 
-    function withLdflags(string $ldflags): static
+    function withLdflags(string $ldflags)
     {
         $this->ldflags = $ldflags;
         return $this;
     }
 
-    function withMakeOptions(string $makeOptions): static
+    function withMakeOptions(string $makeOptions)
     {
         $this->makeOptions = $makeOptions;
         return $this;
     }
 
-    function withMakeInstallOptions(string $makeInstallOptions): static
+    function withMakeInstallOptions(string $makeInstallOptions)
     {
         $this->makeInstallOptions = $makeInstallOptions;
         return $this;
     }
 
-    function withPkgConfig(string $pkgConfig): static
+    function withPkgConfig(string $pkgConfig)
     {
         $this->pkgConfig = $pkgConfig;
         return $this;
     }
 
-    function withPkgName(string $pkgName): static
+    function withPkgName(string $pkgName)
     {
         $this->pkgName = $pkgName;
         return $this;
@@ -112,19 +112,19 @@ class Extension extends Project
     public string $file = '';
     public string $path = '';
 
-    function withOptions(string $options): static
+    function withOptions(string $options)
     {
         $this->options = $options;
         return $this;
     }
 
-    function withUrl(string $url): static
+    function withUrl(string $url)
     {
         $this->url = $url;
         return $this;
     }
 
-    function withPeclVersion(string $peclVersion): static
+    function withPeclVersion(string $peclVersion)
     {
         $this->peclVersion = $peclVersion;
         return $this;
@@ -152,6 +152,12 @@ class Preprocessor
         $this->rootDir = $rootPath;
         $this->libraryDir = $rootPath . '/pool/lib';
         $this->extensionDir = $rootPath . '/pool/ext';
+        if (!file_exists($this->libraryDir)) {
+            @mkdir($this->libraryDir, 0777, true);
+        }
+        if (!file_exists($this->extensionDir)) {
+            @mkdir($this->extensionDir, 0777, true);
+        }
     }
 
     function setPhpSrcDir(string $phpSrcDir)

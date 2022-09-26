@@ -37,8 +37,8 @@ OPTIONS="--disable-all \
 --with-openssl=/Users/caozheyan/gitwonder/swoole-cli/work/opt/usr/openssl --with-openssl-dir=/Users/caozheyan/gitwonder/swoole-cli/work/opt/usr/openssl \
 --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml \
 --enable-gd --with-jpeg=/Users/caozheyan/gitwonder/swoole-cli/work/opt/usr --with-freetype=/Users/caozheyan/gitwonder/swoole-cli/work/opt/usr \
---enable-redis \
---enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares \
+--enable-redis --enable-redis-json \
+--enable-swoole --enable-http2 --enable-sockets --enable-mysqlnd --enable-swoole-json --enable-swoole-curl --enable-cares \
 --with-yaml=/Users/caozheyan/gitwonder/swoole-cli/work/opt/usr/libyaml \
 --with-imagick=/Users/caozheyan/gitwonder/swoole-cli/work/opt/usr/imagemagick \
 "
@@ -290,7 +290,7 @@ make_bzip2() {
     tar --strip-components=1 -C /Users/caozheyan/gitwonder/swoole-cli/work/thirdparty/bzip2 -xf /Users/caozheyan/gitwonder/swoole-cli/pool/lib/bzip2-1.0.8.tar.gz  && \
     cd bzip2 && \
     echo  ""
-        make -j 8 bzip2 PREFIX=/Users/caozheyan/gitwonder/swoole-cli/work/opt/usr/bzip2 && \
+        make -j 8  PREFIX=/Users/caozheyan/gitwonder/swoole-cli/work/opt/usr/bzip2 && \
     make install PREFIX=/Users/caozheyan/gitwonder/swoole-cli/work/opt/usr/bzip2 && \
     cd -
 }
@@ -490,10 +490,6 @@ make_all_library() {
 config_php() {
     rm ./configure
     ./buildconf --force
-    mv main/php_config.h.in /tmp/cnt
-    echo -ne '#ifndef __PHP_CONFIG_H\n#define __PHP_CONFIG_H\n' > main/php_config.h.in
-    cat /tmp/cnt >> main/php_config.h.in
-    echo -ne '\n#endif\n' >> main/php_config.h.in
     echo $OPTIONS
     echo $PKG_CONFIG_PATH
     ./configure $OPTIONS
@@ -707,6 +703,8 @@ elif [ "$1" = "pkg-check" ] ;then
     echo "==========================================================="
 elif [ "$1" = "sync" ] ;then
   echo "sync"
+  rm -rf ./Zend ./ext ./main ./build ./TSRM
+  mkdir -p ./ext/
   # ZendVM
   cp -r $SRC/Zend ./
   # Extension
@@ -761,6 +759,7 @@ elif [ "$1" = "sync" ] ;then
   # main
   cp -r $SRC/main ./
   cp -r $SRC/build ./
+  cp -r $SRC/TSRM ./
   cp -r ./TSRM/TSRM.h main/TSRM.h
   cp -r $SRC/configure.ac ./
   exit 0

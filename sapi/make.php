@@ -49,10 +49,12 @@ make_all_library() {
 config_php() {
     rm ./configure
     ./buildconf --force
+<?php if (PHP_OS !== 'Darwin') : ?>
     mv main/php_config.h.in /tmp/cnt
     echo -ne '#ifndef __PHP_CONFIG_H\n#define __PHP_CONFIG_H\n' > main/php_config.h.in
     cat /tmp/cnt >> main/php_config.h.in
     echo -ne '\n#endif\n' >> main/php_config.h.in
+<?php endif; ?>
     echo $OPTIONS
     echo $PKG_CONFIG_PATH
     ./configure $OPTIONS

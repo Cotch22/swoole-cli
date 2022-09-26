@@ -508,7 +508,7 @@ $extAvailabled = [
     "protobuf"=>function($p){
         $p->addExtension((new Extension('protobuf'))
             ->withOptions('--enable-protobuf')
-            ->withPeclVersion('3.19.1'));
+            ->withPeclVersion('3.19.4'));
     },
 ];
 
@@ -520,8 +520,8 @@ $extEnabled = [
     'swoole',
     'yaml',
     'imagick',
-    'grpc',
-    'protobuf'
+    //'grpc',
+    //'protobuf'
     //'inotify',
     //'mongodb',
 ];

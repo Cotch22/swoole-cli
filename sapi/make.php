@@ -117,6 +117,8 @@ elif [ "$1" = "pkg-check" ] ;then
 <?php endforeach; ?>
 elif [ "$1" = "sync" ] ;then
   echo "sync"
+  rm -rf ./Zend ./ext ./main ./build ./TSRM
+  mkdir -p ./ext/
   # ZendVM
   cp -r $SRC/Zend ./
   # Extension
@@ -171,6 +173,7 @@ elif [ "$1" = "sync" ] ;then
   # main
   cp -r $SRC/main ./
   cp -r $SRC/build ./
+  cp -r $SRC/TSRM ./
   cp -r ./TSRM/TSRM.h main/TSRM.h
   cp -r $SRC/configure.ac ./
   exit 0

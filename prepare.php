@@ -457,8 +457,8 @@ $extAvailabled = [
     },
     'swoole' => function ($p) {
         $p->addExtension((new Extension('swoole'))
-            ->withOptions('--enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares')
             ->withPeclVersion('4.8.12')
+            ->withOptions('--enable-swoole --enable-http2 --enable-sockets --enable-mysqlnd --enable-swoole-json --enable-swoole-curl --enable-cares')
             ->withLicense('https://github.com/swoole/swoole-src/blob/master/LICENSE', Extension::LICENSE_APACHE2)
             ->withHomePage('https://github.com/swoole/swoole-src')
         );
@@ -481,7 +481,7 @@ $extAvailabled = [
     },
     'redis' => function ($p) {
         $p->addExtension((new Extension('redis'))
-            ->withOptions('--enable-redis')
+            ->withOptions('--enable-redis --enable-redis-json')
             ->withPeclVersion('5.3.7')
             ->withHomePage('https://github.com/phpredis/phpredis')
             ->withLicense('https://github.com/phpredis/phpredis/blob/develop/COPYING', Extension::LICENSE_PHP)
@@ -499,12 +499,17 @@ $extAvailabled = [
     },
     'grpc' => function ($p) {
         $p->addExtension((new Extension('grpc'))
-            ->withOptions('--enable-grpc')
-            ->withPeclVersion('1.49.0')
+            ->withOptions('--enable-grpc=/usr/grpc')
+            ->withPeclVersion('1.44.0')
             ->withHomePage('https://github.com/grpc/grpc')
             ->withLicense('https://github.com/grpc/grpc/blob/master/LICENSE', Library::LICENSE_APACHE2)
         );
-    }
+    },
+    "protobuf"=>function($p){
+        $p->addExtension((new Extension('protobuf'))
+            ->withOptions('--enable-protobuf')
+            ->withPeclVersion('3.19.1'));
+    },
 ];
 
 $extEnabled = [
@@ -516,8 +521,9 @@ $extEnabled = [
     'yaml',
     'imagick',
     'grpc',
+    'protobuf'
     //'inotify',
-    //'mongodb'
+    //'mongodb',
 ];
 
 for ($i = 1; $i < $argc; $i++) {

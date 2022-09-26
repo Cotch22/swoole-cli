@@ -489,6 +489,7 @@ static void php_cli_usage(char *argv0)
 				"   %s [options] -r <code> [--] [args...]\n"
 				"   %s [options] [-B <begin_code>] -R <code> [-E <end_code>] [--] [args...]\n"
 				"   %s [options] [-B <begin_code>] -F <file> [-E <end_code>] [--] [args...]\n"
+				"   %s [options] -S <addr>:<port> [-t docroot] [router]\n"
 				"   %s [options] -- [args...]\n"
 				"   %s [options] -a\n"
 				"\n"
@@ -512,7 +513,6 @@ static void php_cli_usage(char *argv0)
 				"  -F <file>        Parse and execute <file> for every input line\n"
 				"  -E <end_code>    Run PHP <end_code> after processing all input lines\n"
 				"  -H               Hide any passed arguments from external tools.\n"
-				"  -t <docroot>     Specify document root <docroot> for built-in web server.\n"
 				"  -s               Output HTML syntax highlighted source.\n"
 				"  -v               Version number\n"
 				"  -w               Output source with stripped comments and whitespace.\n"
@@ -551,12 +551,6 @@ static void cli_register_file_handles(void) /* {{{ */
 		if (s_err) php_stream_close(s_err);
 		return;
 	}
-
-#if PHP_DEBUG
-	/* do not close stdout and stderr */
-	s_out->flags |= PHP_STREAM_FLAG_NO_CLOSE;
-	s_err->flags |= PHP_STREAM_FLAG_NO_CLOSE;
-#endif
 
 	s_in_process = s_in;
 
@@ -606,9 +600,9 @@ BOOL WINAPI php_cli_win32_ctrl_handler(DWORD sig)
 #endif
 /*}}}*/
 
-void show_swoole_version(void) {
-    php_printf("Swoole %s (%s) (built: %s %s) (%s)\n",
-        SWOOLE_VERSION, cli_sapi_module.name, __DATE__, __TIME__,
+void show_version(void) {
+    php_printf("Swoole %s PHP %s (%s) (built: %s %s) (%s)\n",
+        SWOOLE_VERSION, PHP_VERSION , cli_sapi_module.name, __DATE__, __TIME__,
 #ifdef ZTS
         "ZTS"
 #else
@@ -628,7 +622,6 @@ void show_swoole_version(void) {
 #endif
     );
 }
-
 
 static int do_cli(int argc, char **argv) /* {{{ */
 {
@@ -665,7 +658,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				goto out;
 
 			case 'v': /* show php version & quit */
-			    show_swoole_version();
+				show_version();
 				sapi_deactivate();
 				goto out;
 

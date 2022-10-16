@@ -27,7 +27,6 @@ jobs:
           brew uninstall --ignore-dependencies libomp
           brew install bison automake re2c
           ln -s /usr/local/bin/glibtoolize /usr/local/bin/libtoolize
-          echo 'export PATH="/usr/local/opt/bison/bin:$PATH"' >> /Users/runner/.bash_profile
           chmod +x make.sh
       - if: ${{ steps.cache-deps.outputs.cache-hit != 'true' }}
         name: Build deps
@@ -38,10 +37,10 @@ jobs:
           ./make.sh pkg-check
       - name: Run configure
         run: |
-          ./make.sh config
+          PATH="/usr/local/opt/bison/bin:$PATH" ./make.sh config
       - name: Run build
         run: |
-          ./make.sh build
+          PATH="/usr/local/opt/bison/bin:$PATH" ./make.sh build
       - name: Run test
         run: |
           otool -L bin/swoole-cli

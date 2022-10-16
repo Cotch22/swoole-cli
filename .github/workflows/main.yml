@@ -1,3 +1,4 @@
+name: Build on macOS
 on:
   push:
     tags:
@@ -19,6 +20,7 @@ jobs:
           brew install bison automake re2c
           ln -s /usr/local/bin/glibtoolize /usr/local/bin/libtoolize
           export PATH=/usr/local/opt/bison/bin:$PATH
+          chmod +x make.sh
       - name: Build deps
         run: |
           ./make.sh all-library

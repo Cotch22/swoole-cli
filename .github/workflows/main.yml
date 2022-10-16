@@ -1,0 +1,46 @@
+on:
+  push:
+    tags:
+    - 4.8.*-8.0.*-r*
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v3
+      - name: Prepare
+        run: |
+          php prepare.php
+          brew uninstall --ignore-dependencies oniguruma
+          brew uninstall --ignore-dependencies brotli
+          brew uninstall --ignore-dependencies freetype
+          brew uninstall --ignore-dependencies libomp
+          brew install bison automake re2c
+          ln -s /usr/local/bin/glibtoolize /usr/local/bin/libtoolize
+          export PATH=/usr/local/opt/bison/bin:$PATH
+      - name: Build deps
+        run: |
+          ./make.sh all-library
+          rm -rf ../opt/usr/lib/*.dylib
+          ./make.sh pkg-check
+      - name: Run configure
+        run: |
+          ./make.sh config
+      - name: Run build
+        run: |
+          ./make.sh build
+      - name: Run test
+        run: |
+          otool -L bin/swoole-cli
+          ./bin/swoole-cli -i
+          ./bin/swoole-cli -m
+          ./bin/swoole-cli -v
+      - name: Run package
+        run: |
+          cd bin
+          tar czvf swoole-cli-${{ runner.os }}-x64-${{ github.ref }}.tar.gz LICENSE swoole-cli
+      - uses: actions/upload-artifact@v3
+        with:
+          name: swoole-cli-${{ runner.os }}-${{ github.sha }}
+          path: bin/swoole-cli-${{ runner.os }}-x64-${{ github.ref }}.tar.gz

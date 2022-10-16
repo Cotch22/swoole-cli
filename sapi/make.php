@@ -9,6 +9,16 @@ export CC=clang
 export CXX=clang++
 export LD=ld.lld
 export PKG_CONFIG_PATH=<?= implode(':', $this->pkgConfigPaths) . PHP_EOL ?>
+<?php if ($this->osType == 'macos') : ?>
+export ICU_CFLAGS=$(pkg-config --cflags icu-uc)
+export ICU_LIBS=$(pkg-config --libs icu-uc)
+export ONIG_CFLAGS=$(pkg-config --cflags oniguruma)
+export ONIG_LIBS=$(pkg-config --libs oniguruma)
+export LIBZIP_CFLAGS=$(pkg-config --cflags libzip)
+export LIBZIP_LIBS=$(pkg-config --libs libzip)
+export LIBSODIUM_CFLAGS=$(pkg-config --cflags libsodium)
+export LIBSODIUM_LIBS=$(pkg-config --libs libsodium)
+<?php endif; ?>
 OPTIONS="--disable-all \
 <?php foreach ($this->extensionList as $item) : ?>
 <?=$item->options?> \

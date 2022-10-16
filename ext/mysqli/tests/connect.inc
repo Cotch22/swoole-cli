@@ -7,7 +7,6 @@
     */
 
     $driver    = new mysqli_driver;
-    $driver->report_mode = MYSQLI_REPORT_OFF;
 
     $host      = getenv("MYSQL_TEST_HOST")     ?: "127.0.0.1";
     $port      = getenv("MYSQL_TEST_PORT")     ?: 3306;
@@ -52,7 +51,7 @@
     if (!function_exists('my_mysqli_connect')) {
 
         /**
-        * Whenever possible, please use this wrapper to make testing of MYSQLI_CLIENT_COMPRESS (and potentially SSL) possible
+        * Whenever possible, please use this wrapper to make testing ot MYSQLI_CLIENT_COMPRESS (and potentially SSL) possible
         *
         * @param enable_env_flags Enable setting of connection flags through 	env(MYSQL_TEST_CONNECT_FLAGS)?
         */
@@ -72,7 +71,7 @@
         }
 
         /**
-        * Whenever possible, please use this wrapper to make testing of MYSQLI_CLIENT_COMPRESS (and potentially SSL) possible
+        * Whenever possible, please use this wrapper to make testing ot MYSQLI_CLIENT_COMPRESS (and potentially SSL) possible
         *
         * @param enable_env_flags Enable setting of connection flags through env(MYSQL_TEST_CONNECT_FLAGS)
         */
@@ -92,7 +91,7 @@
                 $flags = ($enable_env_flags) ? $connect_flags : 0;
 
                 if ($flags !== false) {
-                    parent::__construct();
+                    parent::init();
                     $this->real_connect($host, $user, $passwd, $db, $port, $socket, $flags);
                 } else {
                     parent::__construct($host, $user, $passwd, $db, $port, $socket);

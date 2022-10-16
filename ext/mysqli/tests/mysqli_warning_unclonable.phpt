@@ -1,9 +1,8 @@
 --TEST--
 Trying to clone mysqli_warning object
---EXTENSIONS--
-mysqli
 --SKIPIF--
 <?php
+require_once('skipif.inc');
 require_once('skipifconnectfailure.inc');
 require_once('connect.inc');
 if (!$TEST_EXPERIMENTAL)

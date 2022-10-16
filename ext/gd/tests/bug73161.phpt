@@ -2,8 +2,10 @@
 Bug #73161 (imagecreatefromgd2() may leak memory)
 --DESCRIPTION--
 We're testing for a memory leak that might not even show up with valgrind.
---EXTENSIONS--
-gd
+--SKIPIF--
+<?php
+if (!extension_loaded('gd')) die('skip gd extension not available');
+?>
 --FILE--
 <?php
 $im = imagecreatefromgd2(__DIR__ . DIRECTORY_SEPARATOR . 'bug73161.gd2');

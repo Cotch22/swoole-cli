@@ -3,7 +3,7 @@
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
    | available through the world-wide-web at the following url:           |
-   | https://www.php.net/license/3_01.txt                                 |
+   | http://www.php.net/license/3_01.txt                                  |
    | If you did not receive a copy of the PHP license and are unable to   |
    | obtain it through the world-wide-web, please send a note to          |
    | license@php.net so we can mail you a copy immediately.               |
@@ -31,11 +31,11 @@ static inline RuleBasedBreakIterator *fetch_rbbi(BreakIterator_object *bio) {
 	return (RuleBasedBreakIterator*)bio->biter;
 }
 
-static void _php_intlrbbi_constructor_body(INTERNAL_FUNCTION_PARAMETERS, zend_error_handling *error_handling, bool *error_handling_replaced)
+static void _php_intlrbbi_constructor_body(INTERNAL_FUNCTION_PARAMETERS)
 {
 	char		*rules;
 	size_t		rules_len;
-	bool	compiled	= 0;
+	zend_bool	compiled	= 0;
 	UErrorCode	status		= U_ZERO_ERROR;
 	BREAKITER_METHOD_INIT_VARS;
 	object = ZEND_THIS;
@@ -50,9 +50,6 @@ static void _php_intlrbbi_constructor_body(INTERNAL_FUNCTION_PARAMETERS, zend_er
 		zend_throw_error(NULL, "IntlRuleBasedBreakIterator object is already constructed");
 		RETURN_THROWS();
 	}
-
-	zend_replace_error_handling(EH_THROW, IntlException_ce_ptr, error_handling);
-	*error_handling_replaced = 1;
 
 	// instantiation of ICU object
 	RuleBasedBreakIterator *rbbi;
@@ -98,13 +95,11 @@ static void _php_intlrbbi_constructor_body(INTERNAL_FUNCTION_PARAMETERS, zend_er
 U_CFUNC PHP_METHOD(IntlRuleBasedBreakIterator, __construct)
 {
 	zend_error_handling error_handling;
-	bool error_handling_replaced = 0;
 
+	zend_replace_error_handling(EH_THROW, IntlException_ce_ptr, &error_handling);
 	return_value = ZEND_THIS;
-	_php_intlrbbi_constructor_body(INTERNAL_FUNCTION_PARAM_PASSTHRU, &error_handling, &error_handling_replaced);
-	if (error_handling_replaced) {
-		zend_restore_error_handling(&error_handling);
-	}
+	_php_intlrbbi_constructor_body(INTERNAL_FUNCTION_PARAM_PASSTHRU);
+	zend_restore_error_handling(&error_handling);
 }
 
 U_CFUNC PHP_METHOD(IntlRuleBasedBreakIterator, getRules)

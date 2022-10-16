@@ -5,7 +5,7 @@
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
   | available through the world-wide-web at the following url:           |
-  | https://www.php.net/license/3_01.txt                                 |
+  | http://www.php.net/license/3_01.txt.                                 |
   | If you did not receive a copy of the PHP license and are unable to   |
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
@@ -282,7 +282,8 @@ static int php_zip_add_file(ze_zip_object *obj, const char *filename, size_t fil
 {
 	struct zip_source *zs;
 	char resolved_path[MAXPATHLEN];
-	php_stream_statbuf ssb;
+	zval exists_flag;
+
 
 	if (ZIP_OPENBASEDIR_CHECKPATH(filename)) {
 		return -1;
@@ -293,7 +294,8 @@ static int php_zip_add_file(ze_zip_object *obj, const char *filename, size_t fil
 		return -1;
 	}
 
-	if (php_stream_stat_path_ex(resolved_path, PHP_STREAM_URL_STAT_QUIET, &ssb, NULL)) {
+	php_stat(resolved_path, strlen(resolved_path), FS_EXISTS, &exists_flag);
+	if (Z_TYPE(exists_flag) == IS_FALSE) {
 		php_error_docref(NULL, E_WARNING, "No such file or directory");
 		return -1;
 	}
@@ -831,12 +833,17 @@ static void php_zip_register_prop_handler(HashTable *prop_handler, char *name, z
 {
 	zip_prop_handler hnd;
 	zend_string *str;
+	zval tmp;
 
 	hnd.read_const_char_func = read_char_func;
 	hnd.read_int_func = read_int_func;
 	hnd.type = rettype;
 	str = zend_string_init_interned(name, strlen(name), 1);
 	zend_hash_add_mem(prop_handler, str, &hnd, sizeof(zip_prop_handler));
+
+	/* Register for reflection */
+	ZVAL_NULL(&tmp);
+	zend_declare_property_ex(zip_class_entry, str, &tmp, ZEND_ACC_PUBLIC, NULL);
 	zend_string_release_ex(str, 1);
 }
 /* }}} */
@@ -860,6 +867,10 @@ static zval *php_zip_property_reader(ze_zip_object *obj, zip_prop_handler *hnd, 
 			} else {
 				ZVAL_EMPTY_STRING(rv);
 			}
+			break;
+		/* case IS_TRUE */
+		case IS_FALSE:
+			ZVAL_BOOL(rv, retint);
 			break;
 		case IS_LONG:
 			ZVAL_LONG(rv, retint);
@@ -891,26 +902,6 @@ static zval *php_zip_get_property_ptr_ptr(zend_object *object, zend_string *name
 	return retval;
 }
 /* }}} */
-
-
-static zval *php_zip_write_property(zend_object *object, zend_string *name, zval *value, void **cache_slot)
-{
-	ze_zip_object *obj;
-	zip_prop_handler *hnd = NULL;
-
-	obj = php_zip_fetch_object(object);
-
-	if (obj->prop_handler != NULL) {
-		hnd = zend_hash_find_ptr(obj->prop_handler, name);
-	}
-
-	if (hnd != NULL) {
-		zend_throw_error(NULL, "Cannot write read-only property %s::$%s", ZSTR_VAL(object->ce->name), ZSTR_VAL(name));
-		return &EG(error_zval);
-	}
-
-	return zend_std_write_property(object, name, value, cache_slot);
-}
 
 static zval *php_zip_read_property(zend_object *object, zend_string *name, int type, void **cache_slot, zval *rv) /* {{{ */
 {
@@ -3007,7 +2998,7 @@ PHP_METHOD(ZipArchive, registerCancelCallback)
 PHP_METHOD(ZipArchive, isCompressionMethodSupported)
 {
 	zend_long method;
-	bool enc = 1;
+	zend_bool enc = 1;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l|b", &method, &enc) == FAILURE) {
 		return;
@@ -3020,7 +3011,7 @@ PHP_METHOD(ZipArchive, isCompressionMethodSupported)
 PHP_METHOD(ZipArchive, isEncryptionMethodSupported)
 {
 	zend_long method;
-	bool enc = 1;
+	zend_bool enc = 1;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l|b", &method, &enc) == FAILURE) {
 		return;
@@ -3037,6 +3028,8 @@ static void php_zip_free_prop_handler(zval *el) /* {{{ */ {
 /* {{{ PHP_MINIT_FUNCTION */
 static PHP_MINIT_FUNCTION(zip)
 {
+	zend_class_entry ce;
+
 	memcpy(&zip_object_handlers, &std_object_handlers, sizeof(zend_object_handlers));
 	zip_object_handlers.offset = XtOffsetOf(ze_zip_object, zo);
 	zip_object_handlers.free_obj = php_zip_object_free_storage;
@@ -3047,10 +3040,10 @@ static PHP_MINIT_FUNCTION(zip)
 	zip_object_handlers.get_properties = php_zip_get_properties;
 	zip_object_handlers.read_property	= php_zip_read_property;
 	zip_object_handlers.has_property	= php_zip_has_property;
-	zip_object_handlers.write_property = php_zip_write_property;
 
-	zip_class_entry = register_class_ZipArchive(zend_ce_countable);
-	zip_class_entry->create_object = php_zip_object_new;
+	INIT_CLASS_ENTRY(ce, "ZipArchive", class_ZipArchive_methods);
+	ce.create_object = php_zip_object_new;
+	zip_class_entry = zend_register_internal_class(&ce);
 
 	zend_hash_init(&zip_prop_handlers, 0, NULL, php_zip_free_prop_handler, 1);
 	php_zip_register_prop_handler(&zip_prop_handlers, "lastId",    php_zip_last_id, NULL, IS_LONG);
@@ -3059,6 +3052,7 @@ static PHP_MINIT_FUNCTION(zip)
 	php_zip_register_prop_handler(&zip_prop_handlers, "numFiles",  php_zip_get_num_files, NULL, IS_LONG);
 	php_zip_register_prop_handler(&zip_prop_handlers, "filename",  NULL, php_zipobj_get_filename, IS_STRING);
 	php_zip_register_prop_handler(&zip_prop_handlers, "comment",   NULL, php_zipobj_get_zip_comment, IS_STRING);
+	zend_class_implements(zip_class_entry, 1, zend_ce_countable);
 
 	REGISTER_ZIP_CLASS_CONST_LONG("CREATE", ZIP_CREATE);
 	REGISTER_ZIP_CLASS_CONST_LONG("EXCL", ZIP_EXCL);

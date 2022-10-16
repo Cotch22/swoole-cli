@@ -1,7 +1,9 @@
 --TEST--
 Bug #73157 (imagegd2() ignores 3rd param if 4 are given)
---EXTENSIONS--
-gd
+--SKIPIF--
+<?php
+if (!extension_loaded('gd')) die('skip gd extension not available');
+?>
 --FILE--
 <?php
 $im = imagecreate(8, 8);

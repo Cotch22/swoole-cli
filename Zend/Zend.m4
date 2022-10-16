@@ -149,40 +149,6 @@ dnl Checks for library functions.
 AC_CHECK_FUNCS(getpid kill sigsetjmp)
 
 ZEND_CHECK_FLOAT_PRECISION
-
-dnl Test whether double cast to long preserves least significant bits.
-AC_MSG_CHECKING(whether double cast to long preserves least significant bits)
-
-AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <limits.h>
-#include <stdlib.h>
-
-int main()
-{
-	if (sizeof(long) == 4) {
-		double d = (double) LONG_MIN * LONG_MIN + 2e9;
-
-		if ((long) d == 2e9 && (long) -d == -2e9) {
-			return 0;
-		}
-	} else if (sizeof(long) == 8) {
-		double correct = 18e18 - ((double) LONG_MIN * -2); /* Subtract ULONG_MAX + 1 */
-
-		if ((long) 18e18 == correct) { /* On 64-bit, only check between LONG_MAX and ULONG_MAX */
-			return 0;
-		}
-	}
-	return 1;
-}
-]])], [
-  AC_DEFINE([ZEND_DVAL_TO_LVAL_CAST_OK], 1, [Define if double cast to long preserves least significant bits])
-  AC_MSG_RESULT(yes)
-], [
-  AC_MSG_RESULT(no)
-], [
-  AC_MSG_RESULT(no)
-])
-
 ])
 
 dnl
@@ -206,16 +172,9 @@ else
   AC_DEFINE(ZEND_DEBUG,0,[ ])
 fi
 
-test -n "$GCC" && CFLAGS="-Wall -Wextra -Wno-strict-aliasing -Wno-unused-parameter -Wno-sign-compare $CFLAGS"
+test -n "$GCC" && CFLAGS="-Wall -Wextra -Wno-strict-aliasing -Wno-implicit-fallthrough -Wno-unused-parameter -Wno-sign-compare $CFLAGS"
 dnl Check if compiler supports -Wno-clobbered (only GCC)
 AX_CHECK_COMPILE_FLAG([-Wno-clobbered], CFLAGS="-Wno-clobbered $CFLAGS", , [-Werror])
-dnl Check for support for implicit fallthrough level 1, also add after previous CFLAGS as level 3 is enabled in -Wextra
-AX_CHECK_COMPILE_FLAG([-Wimplicit-fallthrough=1], CFLAGS="$CFLAGS -Wimplicit-fallthrough=1", , [-Werror])
-AX_CHECK_COMPILE_FLAG([-Wduplicated-cond], CFLAGS="-Wduplicated-cond $CFLAGS", , [-Werror])
-AX_CHECK_COMPILE_FLAG([-Wlogical-op], CFLAGS="-Wlogical-op $CFLAGS", , [-Werror])
-AX_CHECK_COMPILE_FLAG([-Wformat-truncation], CFLAGS="-Wformat-truncation $CFLAGS", , [-Werror])
-AX_CHECK_COMPILE_FLAG([-Wstrict-prototypes], CFLAGS="-Wstrict-prototypes $CFLAGS", , [-Werror])
-AX_CHECK_COMPILE_FLAG([-fno-common], CFLAGS="-fno-common $CFLAGS", , [-Werror])
 
 test -n "$DEBUG_CFLAGS" && CFLAGS="$CFLAGS $DEBUG_CFLAGS"
 
@@ -278,8 +237,7 @@ int main()
   AC_DEFINE_UNQUOTED(ZEND_MM_ALIGNMENT_LOG2, $LIBZEND_MM_ALIGN_LOG2, [ ])
 ], [], [
   dnl Cross compilation needs something here.
-  AC_DEFINE_UNQUOTED(ZEND_MM_ALIGNMENT, 8, [ ])
-  AC_DEFINE_UNQUOTED(ZEND_MM_ALIGNMENT_LOG2, 3, [ ])
+  LIBZEND_MM_ALIGN=8
 ])
 
 AC_MSG_RESULT(done)

@@ -1,7 +1,7 @@
 --TEST--
 Bug #66960 phar long filename crash
---EXTENSIONS--
-phar
+--SKIPIF--
+<?php if (!extension_loaded("phar")) die("skip"); ?>
 --INI--
 phar.readonly = 0
 memory_limit = -1

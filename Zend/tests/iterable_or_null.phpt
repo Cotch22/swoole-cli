@@ -1,7 +1,9 @@
 --TEST--
 Test Z_PARAM_ITERABLE() and Z_PARAM_ITERABLE_OR_NULL
---EXTENSIONS--
-zend_test
+--SKIPIF--
+<?php
+if (!extension_loaded('zend-test')) die('skip zend-test extension not loaded');
+?>
 --FILE--
 <?php
 

@@ -28,6 +28,7 @@ function stat_fn( $filename ) {
 
 echo "*** Testing fileattime(), filemtime(), filectime() & touch() : usage variations ***\n";
 echo "\n*** testing touch ***\n";
+$a = touch(NULL);
 $b = touch(false);
 $c = touch('');
 $d = touch(' ');
@@ -40,6 +41,7 @@ var_dump($d);
 var_dump($e);
 
 echo "\n*** testing file info ***";
+stat_fn(NULL);
 stat_fn(false);
 stat_fn('');
 stat_fn(' ');
@@ -54,15 +56,18 @@ echo "Done";
 *** Testing fileattime(), filemtime(), filectime() & touch() : usage variations ***
 
 *** testing touch ***
-
-Warning: Undefined variable $a in %s on line %d
-NULL
+bool(false)
 bool(false)
 bool(false)
 bool(true)
 bool(true)
 
 *** testing file info ***
+-- File '' --
+-- File access time is => 
+-- File modification time is => 
+-- inode change time is => 
+
 -- File '' --
 -- File access time is => 
 -- File modification time is => 

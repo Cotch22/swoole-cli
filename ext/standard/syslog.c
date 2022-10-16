@@ -5,7 +5,7 @@
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
    | available through the world-wide-web at the following url:           |
-   | https://www.php.net/license/3_01.txt                                 |
+   | http://www.php.net/license/3_01.txt                                  |
    | If you did not receive a copy of the PHP license and are unable to   |
    | obtain it through the world-wide-web, please send a note to          |
    | license@php.net so we can mail you a copy immediately.               |
@@ -169,14 +169,15 @@ PHP_FUNCTION(closelog)
 PHP_FUNCTION(syslog)
 {
 	zend_long priority;
-	zend_string *message;
+	char *message;
+	size_t message_len;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(priority)
-		Z_PARAM_STR(message)
+		Z_PARAM_STRING(message, message_len)
 	ZEND_PARSE_PARAMETERS_END();
 
-	php_syslog_str(priority, message);
+	php_syslog(priority, "%s", message);
 	RETURN_TRUE;
 }
 /* }}} */

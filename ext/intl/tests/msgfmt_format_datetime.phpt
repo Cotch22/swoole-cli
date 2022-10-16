@@ -2,8 +2,10 @@
 MessageFormatter::format(): DateTime accepted to format dates and times
 --INI--
 date.timezone=Atlantic/Azores
---EXTENSIONS--
-intl
+--SKIPIF--
+<?php
+if (!extension_loaded('intl'))
+    die('skip intl extension not enabled');
 --FILE--
 <?php
 ini_set("intl.error_level", E_WARNING);

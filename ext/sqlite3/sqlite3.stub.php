@@ -1,143 +1,137 @@
 <?php
 
-/** @generate-class-entries */
+/** @generate-function-entries */
 
-/** @not-serializable */
 class SQLite3
 {
-    /**
-     * @implementation-alias SQLite3::open
-     * @no-verify SQLite3::open should really be static
-     */
+    /** @implementation-alias SQLite3::open */
     public function __construct(string $filename, int $flags = SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, string $encryptionKey = "") {}
 
-    /** @tentative-return-type */
-    public function open(string $filename, int $flags = SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, string $encryptionKey = ""): void {}
+    /** @return void */
+    public function open(string $filename, int $flags = SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, string $encryptionKey = "") {}
 
     /** @return bool */
-    public function close() {} // TODO make return type void
+    public function close() {}
 
-    /** @tentative-return-type */
-    public static function version(): array {}
+    /** @return array */
+    public static function version() {}
 
-    /** @tentative-return-type */
-    public function lastInsertRowID(): int {}
+    /** @return int */
+    public function lastInsertRowID() {}
 
-    /** @tentative-return-type */
-    public function lastErrorCode(): int {}
+    /** @return int */
+    public function lastErrorCode() {}
 
-    /** @tentative-return-type */
-    public function lastExtendedErrorCode(): int {}
+    /** @return int */
+    public function lastExtendedErrorCode() {}
 
-    /** @tentative-return-type */
-    public function lastErrorMsg(): string {}
+    /** @return string */
+    public function lastErrorMsg() {}
 
-    /** @tentative-return-type */
-    public function changes(): int {}
+    /** @return int */
+    public function changes() {}
 
-    /** @tentative-return-type */
-    public function busyTimeout(int $milliseconds): bool {}
+    /** @return bool */
+    public function busyTimeout(int $milliseconds) {}
 
 #ifndef SQLITE_OMIT_LOAD_EXTENSION
-    /** @tentative-return-type */
-    public function loadExtension(string $name): bool {}
+    /** @return bool */
+    public function loadExtension(string $name) {}
 #endif
 
 #if SQLITE_VERSION_NUMBER >= 3006011
-    /** @tentative-return-type */
-    public function backup(SQLite3 $destination, string $sourceDatabase = "main", string $destinationDatabase = "main"): bool {}
+    /** @return bool */
+    public function backup(SQLite3 $destination, string $sourceDatabase = "main", string $destinationDatabase = "main") {}
 #endif
 
-    /** @tentative-return-type */
-    public static function escapeString(string $string): string {}
+    /** @return string */
+    public static function escapeString(string $string) {}
 
-    /** @tentative-return-type */
-    public function prepare(string $query): SQLite3Stmt|false {}
+    /** @return SQLite3Stmt|false */
+    public function prepare(string $query) {}
 
-    /** @tentative-return-type */
-    public function exec(string $query): bool {}
+    /** @return bool */
+    public function exec(string $query) {}
 
-    /** @tentative-return-type */
-    public function query(string $query): SQLite3Result|false {}
+    /** @return SQLite3Result|false */
+    public function query(string $query) {}
 
-    /** @tentative-return-type */
-    public function querySingle(string $query, bool $entireRow = false): mixed {}
+    /** @return mixed */
+    public function querySingle(string $query, bool $entireRow = false) {}
 
-    /** @tentative-return-type */
-    public function createFunction(string $name, callable $callback, int $argCount = -1, int $flags = 0): bool {}
+    /** @return bool */
+    public function createFunction(string $name, callable $callback, int $argCount = -1, int $flags = 0) {}
 
-    /** @tentative-return-type */
-    public function createAggregate(string $name, callable $stepCallback, callable $finalCallback, int $argCount = -1): bool {}
+    /** @return bool */
+    public function createAggregate(string $name, callable $stepCallback, callable $finalCallback, int $argCount = -1) {}
 
-    /** @tentative-return-type */
-    public function createCollation(string $name, callable $callback): bool {}
+    /** @return bool */
+    public function createCollation(string $name, callable $callback) {}
 
     /** @return resource|false */
     public function openBlob(string $table, string $column, int $rowid, string $database = "main", int $flags = SQLITE3_OPEN_READONLY) {}
 
-    /** @tentative-return-type */
-    public function enableExceptions(bool $enable = false): bool {}
+    /** @return bool */
+    public function enableExceptions(bool $enable = false) {}
 
-    /** @tentative-return-type */
-    public function enableExtendedResultCodes(bool $enable = true): bool {}
+    /** @return bool */
+    public function enableExtendedResultCodes(bool $enable = true) {}
 
-    /** @tentative-return-type */
-    public function setAuthorizer(?callable $callback): bool {}
+    /** @return bool */
+    public function setAuthorizer(?callable $callback) {}
 }
 
-/** @not-serializable */
 class SQLite3Stmt
 {
     private function __construct(SQLite3 $sqlite3, string $query) {}
 
-    /** @tentative-return-type */
-    public function bindParam(string|int $param, mixed &$var, int $type = SQLITE3_TEXT): bool {}
+    /** @return bool */
+    public function bindParam(string|int $param, mixed &$var, int $type = SQLITE3_TEXT) {}
 
-    /** @tentative-return-type */
-    public function bindValue(string|int $param, mixed $value, int $type = SQLITE3_TEXT): bool {}
+    /** @return bool */
+    public function bindValue(string|int $param, mixed $value, int $type = SQLITE3_TEXT) {}
 
-    /** @tentative-return-type */
-    public function clear(): bool {}
+    /** @return bool */
+    public function clear() {}
 
-    /** @tentative-return-type */
-    public function close(): bool {}
+    /** @return bool */
+    public function close() {}
 
-    /** @tentative-return-type */
-    public function execute(): SQLite3Result|false {}
+    /** @return SQLite3Result|false */
+    public function execute() {}
 
-    /** @tentative-return-type */
-    public function getSQL(bool $expand = false): string|false {}
+    /** @return string|false */
+    public function getSQL(bool $expand = false) {}
 
-    /** @tentative-return-type */
-    public function paramCount(): int {}
+    /** @return int */
+    public function paramCount() {}
 
-    /** @tentative-return-type */
-    public function readOnly(): bool {}
+    /** @return bool */
+    public function readOnly() {}
 
-    /** @tentative-return-type */
-    public function reset(): bool {}
+    /** @return bool */
+    public function reset() {}
 }
 
-/** @not-serializable */
 class SQLite3Result
 {
     private function __construct() {}
 
-    /** @tentative-return-type */
-    public function numColumns(): int {}
+    /** @return int */
+    public function numColumns() {}
 
-    /** @tentative-return-type */
-    public function columnName(int $column): string|false {}
+    /** @return string|false */
+    public function columnName(int $column) {}
 
-    /** @tentative-return-type */
-    public function columnType(int $column): int|false {}
+    /** @return int|false */
+    public function columnType(int $column) {}
 
-    /** @tentative-return-type */
-    public function fetchArray(int $mode = SQLITE3_BOTH): array|false {}
-
-    /** @tentative-return-type */
-    public function reset(): bool {}
+    /** @return array|false */
+    public function fetchArray(int $mode = SQLITE3_BOTH) {}
 
     /** @return bool */
-    public function finalize() {} // TODO make return type void
+    public function reset() {}
+
+    /** @return bool */
+    public function finalize() {}
 }

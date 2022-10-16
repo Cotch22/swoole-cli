@@ -1,7 +1,7 @@
 --TEST--
 SOAP handling of <any>
---EXTENSIONS--
-soap
+--SKIPIF--
+<?php require_once('skipif.inc'); ?>
 --INI--
 precision=14
 soap.wsdl_cache_enabled=0
@@ -35,7 +35,7 @@ class TestSoapClient extends SoapClient {
     $this->server->addFunction('echoAnyElement');
   }
 
-  function __doRequest($request, $location, $action, $version, $one_way = 0): ?string {
+  function __doRequest($request, $location, $action, $version, $one_way = 0) {
     ob_start();
     $this->server->handle($request);
     $response = ob_get_contents();

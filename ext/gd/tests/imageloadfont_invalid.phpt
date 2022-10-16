@@ -1,7 +1,9 @@
 --TEST--
 imageloadfont() function crashes
---EXTENSIONS--
-gd
+--SKIPIF--
+<?php
+    if (!extension_loaded('gd')) die("skip gd extension not available\n");
+?>
 --FILE--
 <?php
 $filename = __DIR__ .  '/font.gdf';

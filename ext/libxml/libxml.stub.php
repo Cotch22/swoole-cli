@@ -1,15 +1,9 @@
 <?php
 
-/** @generate-class-entries */
+/** @generate-function-entries */
 
 class LibXMLError
 {
-    public int $level;
-    public int $code;
-    public int $column;
-    public string $message;
-    public string $file;
-    public int $line;
 }
 
 /** @param resource $context */
@@ -19,7 +13,6 @@ function libxml_use_internal_errors(?bool $use_errors = null): bool {}
 
 function libxml_get_last_error(): LibXMLError|false {}
 
-/** @return array<int, LibXMLError> */
 function libxml_get_errors(): array {}
 
 function libxml_clear_errors(): void {}

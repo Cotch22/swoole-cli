@@ -1,7 +1,7 @@
 --TEST--
 Objects of DOM extension: debug info object handler.
---EXTENSIONS--
-dom
+--SKIPIF--
+<?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
 $xml = <<<XML
@@ -17,7 +17,6 @@ print_r($d);
 --EXPECTF--
 DOMDocument Object
 (
-    [config] => 
     [dynamicProperty] => stdClass Object
         (
         )
@@ -34,6 +33,7 @@ DOMDocument Object
     [xmlVersion] => 1.0
     [strictErrorChecking] => 1
     [documentURI] => %s
+    [config] => 
     [formatOutput] => 
     [validateOnParse] => 
     [resolveExternals] => 

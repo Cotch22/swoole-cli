@@ -1,7 +1,5 @@
 --TEST--
 mb_send_mail() test 1 (lang=neutral)
---EXTENSIONS--
-mbstring
 --SKIPIF--
 <?php
 if (substr(PHP_OS, 0, 3) == 'WIN') {

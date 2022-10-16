@@ -1,7 +1,7 @@
 --TEST--
 Bug #38067 (Parameters are not decoded from utf-8 when using encoding option)
---EXTENSIONS--
-soap
+--SKIPIF--
+<?php require_once('skipif.inc'); ?>
 --INI--
 soap.wsdl_cache_enabled=0
 --FILE--
@@ -19,7 +19,7 @@ class TestSoapClient extends SoapClient {
     $this->server->addFunction('Test');
   }
 
-  function __doRequest($request, $location, $action, $version, $one_way = 0): ?string {
+  function __doRequest($request, $location, $action, $version, $one_way = 0) {
     ob_start();
     $this->server->handle($request);
     $response = ob_get_contents();

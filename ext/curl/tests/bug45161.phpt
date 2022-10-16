@@ -1,7 +1,9 @@
 --TEST--
 Bug #45161 (Reusing a curl handle leaks memory)
---EXTENSIONS--
-curl
+--SKIPIF--
+<?php
+include 'skipif.inc';
+?>
 --FILE--
 <?php
 include 'server.inc';

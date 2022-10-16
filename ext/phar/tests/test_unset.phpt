@@ -1,7 +1,7 @@
 --TEST--
 Phar: ensure unset() works properly on a non-flushed phar archive
---EXTENSIONS--
-phar
+--SKIPIF--
+<?php if (!extension_loaded("phar")) die("skip"); ?>
 --INI--
 phar.readonly=0
 --FILE--

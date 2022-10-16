@@ -145,5 +145,5 @@ int mbfl_filt_conv_uudec(int c, mbfl_convert_filter * filter)
 			/* skip newline */
 			filter->status = uudec_state_size;
 	}
-	return 0;
+	return c;
 }

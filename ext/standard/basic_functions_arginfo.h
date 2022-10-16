@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 87ed2b04b9b46ce3df78d6f9d6d62bd6b2ae8fe5 */
+ * Stub hash: ff0ec0005317a22c41e61e9c58f67e968d1243c4 */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_set_time_limit, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(0, seconds, IS_LONG, 0)
@@ -360,10 +360,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_array_combine, 0, 2, IS_ARRAY, 0
 	ZEND_ARG_TYPE_INFO(0, values, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_array_is_list, 0, 1, _IS_BOOL, 0)
-	ZEND_ARG_TYPE_INFO(0, array, IS_ARRAY, 0)
-ZEND_END_ARG_INFO()
-
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_base64_encode, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, string, IS_STRING, 0)
 ZEND_END_ARG_INFO()
@@ -491,7 +487,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_ini_set, 0, 2, MAY_BE_STRING|MAY_BE_FALSE)
 	ZEND_ARG_TYPE_INFO(0, option, IS_STRING, 0)
-	ZEND_ARG_TYPE_MASK(0, value, MAY_BE_STRING|MAY_BE_LONG|MAY_BE_DOUBLE|MAY_BE_BOOL|MAY_BE_NULL, NULL)
+	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 #define arginfo_ini_alter arginfo_ini_set
@@ -771,19 +767,19 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_htmlspecialchars, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, string, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "ENT_COMPAT")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, encoding, IS_STRING, 1, "null")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, double_encode, _IS_BOOL, 0, "true")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_htmlspecialchars_decode, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, string, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "ENT_COMPAT")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_html_entity_decode, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, string, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "ENT_COMPAT")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, encoding, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
@@ -791,7 +787,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_get_html_translation_table, 0, 0, IS_ARRAY, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, table, IS_LONG, 0, "HTML_SPECIALCHARS")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flags, IS_LONG, 0, "ENT_COMPAT")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, encoding, IS_STRING, 0, "\"UTF-8\"")
 ZEND_END_ARG_INFO()
 
@@ -1269,10 +1265,6 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_fflush arginfo_rewind
 
-#define arginfo_fsync arginfo_rewind
-
-#define arginfo_fdatasync arginfo_rewind
-
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_fwrite, 0, 2, MAY_BE_LONG|MAY_BE_FALSE)
 	ZEND_ARG_INFO(0, stream)
 	ZEND_ARG_TYPE_INFO(0, data, IS_STRING, 0)
@@ -1336,7 +1328,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_fputcsv, 0, 2, MAY_BE_LONG|MAY_B
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, separator, IS_STRING, 0, "\",\"")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, enclosure, IS_STRING, 0, "\"\\\"\"")
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, escape, IS_STRING, 0, "\"\\\\\"")
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, eol, IS_STRING, 0, "\"\\n\"")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_fgetcsv, 0, 1, MAY_BE_ARRAY|MAY_BE_FALSE)
@@ -1846,7 +1837,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_stream_select, 0, 4, MAY_BE_LONG
 	ZEND_ARG_TYPE_INFO(1, write, IS_ARRAY, 1)
 	ZEND_ARG_TYPE_INFO(1, except, IS_ARRAY, 1)
 	ZEND_ARG_TYPE_INFO(0, seconds, IS_LONG, 1)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, microseconds, IS_LONG, 1, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, microseconds, IS_LONG, 0, "0")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stream_context_create, 0, 0, 0)
@@ -2318,7 +2309,6 @@ ZEND_FUNCTION(array_map);
 ZEND_FUNCTION(array_key_exists);
 ZEND_FUNCTION(array_chunk);
 ZEND_FUNCTION(array_combine);
-ZEND_FUNCTION(array_is_list);
 ZEND_FUNCTION(base64_encode);
 ZEND_FUNCTION(base64_decode);
 ZEND_FUNCTION(constant);
@@ -2567,8 +2557,6 @@ ZEND_FUNCTION(fstat);
 ZEND_FUNCTION(fseek);
 ZEND_FUNCTION(ftell);
 ZEND_FUNCTION(fflush);
-ZEND_FUNCTION(fsync);
-ZEND_FUNCTION(fdatasync);
 ZEND_FUNCTION(fwrite);
 ZEND_FUNCTION(mkdir);
 ZEND_FUNCTION(rename);
@@ -2947,7 +2935,6 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FALIAS(key_exists, array_key_exists, arginfo_key_exists)
 	ZEND_FE(array_chunk, arginfo_array_chunk)
 	ZEND_FE(array_combine, arginfo_array_combine)
-	ZEND_FE(array_is_list, arginfo_array_is_list)
 	ZEND_FE(base64_encode, arginfo_base64_encode)
 	ZEND_FE(base64_decode, arginfo_base64_decode)
 	ZEND_FE(constant, arginfo_constant)
@@ -3020,7 +3007,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(crc32, arginfo_crc32)
 	ZEND_FE(crypt, arginfo_crypt)
 #if HAVE_STRPTIME
-	ZEND_DEP_FE(strptime, arginfo_strptime)
+	ZEND_FE(strptime, arginfo_strptime)
 #endif
 #if defined(HAVE_GETHOSTNAME)
 	ZEND_FE(gethostname, arginfo_gethostname)
@@ -3207,8 +3194,6 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(fseek, arginfo_fseek)
 	ZEND_FE(ftell, arginfo_ftell)
 	ZEND_FE(fflush, arginfo_fflush)
-	ZEND_FE(fsync, arginfo_fsync)
-	ZEND_FE(fdatasync, arginfo_fdatasync)
 	ZEND_FE(fwrite, arginfo_fwrite)
 	ZEND_FALIAS(fputs, fwrite, arginfo_fputs)
 	ZEND_FE(mkdir, arginfo_mkdir)
@@ -3500,34 +3485,3 @@ static const zend_function_entry ext_functions[] = {
 #endif
 	ZEND_FE_END
 };
-
-
-static const zend_function_entry class___PHP_Incomplete_Class_methods[] = {
-	ZEND_FE_END
-};
-
-
-static const zend_function_entry class_AssertionError_methods[] = {
-	ZEND_FE_END
-};
-
-static zend_class_entry *register_class___PHP_Incomplete_Class(void)
-{
-	zend_class_entry ce, *class_entry;
-
-	INIT_CLASS_ENTRY(ce, "__PHP_Incomplete_Class", class___PHP_Incomplete_Class_methods);
-	class_entry = zend_register_internal_class_ex(&ce, NULL);
-	class_entry->ce_flags |= ZEND_ACC_FINAL;
-
-	return class_entry;
-}
-
-static zend_class_entry *register_class_AssertionError(zend_class_entry *class_entry_Error)
-{
-	zend_class_entry ce, *class_entry;
-
-	INIT_CLASS_ENTRY(ce, "AssertionError", class_AssertionError_methods);
-	class_entry = zend_register_internal_class_ex(&ce, class_entry_Error);
-
-	return class_entry;
-}

@@ -1,7 +1,9 @@
 --TEST--
 Bug #38212 (Seg Fault on invalid imagecreatefromgd2part() parameters)
---EXTENSIONS--
-gd
+--SKIPIF--
+<?php
+        if (!function_exists('imagecopy')) die("skip gd extension not available\n");
+?>
 --FILE--
 <?php
 require __DIR__ . '/func.inc';

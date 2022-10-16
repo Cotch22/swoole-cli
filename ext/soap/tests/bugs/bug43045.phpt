@@ -1,7 +1,7 @@
 --TEST--
 Bug #43045i (SOAP encoding violation on "INF" for type double/float)
---EXTENSIONS--
-soap
+--SKIPIF--
+<?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
 function test($x) {
@@ -14,7 +14,7 @@ class TestSoapClient extends SoapClient {
     $this->server = new SoapServer($wsdl, $options);
     $this->server->addFunction('test');
   }
-  function __doRequest($request, $location, $action, $version, $one_way = 0): ?string {
+  function __doRequest($request, $location, $action, $version, $one_way = 0) {
     ob_start();
     $this->server->handle($request);
     $response = ob_get_contents();

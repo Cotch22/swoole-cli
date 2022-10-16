@@ -1,7 +1,9 @@
 --TEST--
 Bug #53885 (ZipArchive segfault with FL_UNCHANGED on empty archive)
---EXTENSIONS--
-zip
+--SKIPIF--
+<?php
+if(!extension_loaded('zip')) die('skip');
+?>
 --FILE--
 <?php
 $fname = __DIR__."/test53885.zip";

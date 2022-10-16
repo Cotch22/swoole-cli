@@ -1,9 +1,8 @@
 --TEST--
 mysqli_fetch_array() - all datatypes but BIT
---EXTENSIONS--
-mysqli
 --SKIPIF--
 <?php
+require_once('skipif.inc');
 require_once('skipifconnectfailure.inc');
 ?>
 --FILE--
@@ -287,7 +286,7 @@ require_once('skipifconnectfailure.inc');
 
     print "done!";
 ?>
---EXPECT--
+--EXPECTF--
 [005]
 array(4) {
   [0]=>

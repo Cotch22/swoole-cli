@@ -1,51 +1,50 @@
 <?php
 
-/** @generate-class-entries */
+/** @generate-function-entries */
 
-/** @not-serializable */
 class PDO
 {
     public function __construct(string $dsn, ?string $username = null, ?string $password = null, ?array $options = null) {}
 
-    /** @tentative-return-type */
-    public function beginTransaction(): bool {}
+    /** @return bool */
+    public function beginTransaction() {}
 
-    /** @tentative-return-type */
-    public function commit(): bool {}
+    /** @return bool */
+    public function commit() {}
 
-    /** @tentative-return-type */
-    public function errorCode(): ?string {}
+    /** @return string|null */
+    public function errorCode() {}
 
-    /** @tentative-return-type */
-    public function errorInfo(): array {}
+    /** @return array */
+    public function errorInfo() {}
 
-    /** @tentative-return-type */
-    public function exec(string $statement): int|false {}
+    /** @return int|false */
+    public function exec(string $statement) {}
 
-    /** @tentative-return-type */
-    public function getAttribute(int $attribute): mixed {}
+    /** @return bool|int|string|array|null */
+    public function getAttribute(int $attribute) {}
 
-    /** @tentative-return-type */
-    public static function getAvailableDrivers(): array {}
+    /** @return array */
+    public static function getAvailableDrivers() {}
 
-    /** @tentative-return-type */
-    public function inTransaction(): bool {}
+    /** @return bool */
+    public function inTransaction() {}
 
-    /** @tentative-return-type */
-    public function lastInsertId(?string $name = null): string|false {}
+    /** @return string|false */
+    public function lastInsertId(?string $name = null) {}
 
-    /** @tentative-return-type */
-    public function prepare(string $query, array $options = []): PDOStatement|false {}
+    /** @return PDOStatement|false */
+    public function prepare(string $query, array $options = []) {}
 
-    /** @tentative-return-type */
-    public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs): PDOStatement|false {}
+    /** @return PDOStatement|false */
+    public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs) {}
 
-    /** @tentative-return-type */
-    public function quote(string $string, int $type = PDO::PARAM_STR): string|false {}
+    /** @return string|false */
+    public function quote(string $string, int $type = PDO::PARAM_STR) {}
 
-    /** @tentative-return-type */
-    public function rollBack(): bool {}
+    /** @return bool */
+    public function rollBack() {}
 
-    /** @tentative-return-type */
-    public function setAttribute(int $attribute, mixed $value): bool {}
+    /** @return bool */
+    public function setAttribute(int $attribute, mixed $value) {}
 }

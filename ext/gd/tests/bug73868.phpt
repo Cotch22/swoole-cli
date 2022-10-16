@@ -1,7 +1,9 @@
 --TEST--
 Bug 73868 (DOS vulnerability in gdImageCreateFromGd2Ctx())
---EXTENSIONS--
-gd
+--SKIPIF--
+<?php
+if (!extension_loaded('gd')) die('skip gd extension not available');
+?>
 --FILE--
 <?php
 var_dump(imagecreatefromgd2(__DIR__ . DIRECTORY_SEPARATOR . 'bug73868.gd2'));

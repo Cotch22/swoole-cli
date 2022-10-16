@@ -1,7 +1,9 @@
 --TEST--
 Bug #73159 (imagegd2(): unrecognized formats may result in corrupted files)
---EXTENSIONS--
-gd
+--SKIPIF--
+<?php
+if (!extension_loaded('gd')) die('skip gd extension not available');
+?>
 --FILE--
 <?php
 $im = imagecreatetruecolor(10, 10);

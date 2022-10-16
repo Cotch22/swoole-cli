@@ -1,9 +1,11 @@
 --TEST--
 Phar: test that creation of zip-based phar generates valid zip with all bells/whistles
---EXTENSIONS--
-phar
-zlib
-bz2
+--SKIPIF--
+<?php
+if (!extension_loaded("phar")) die("skip");
+if (!extension_loaded("zlib")) die("skip zlib not available");
+if (!extension_loaded("bz2")) die("skip bz2 not available");
+?>
 --INI--
 phar.readonly=0
 --FILE--

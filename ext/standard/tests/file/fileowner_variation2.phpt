@@ -19,6 +19,7 @@ $filenames = array(
   "",
   TRUE,
   FALSE,
+  NULL,
 
   /* scalars */
   1234,
@@ -47,6 +48,7 @@ bool(false)
 bool(false)
 
 Warning: fileowner(): stat failed for 1 in %s on line %d
+bool(false)
 bool(false)
 bool(false)
 

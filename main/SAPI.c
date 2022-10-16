@@ -5,7 +5,7 @@
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
    | available through the world-wide-web at the following url:           |
-   | https://www.php.net/license/3_01.txt                                 |
+   | http://www.php.net/license/3_01.txt                                  |
    | If you did not receive a copy of the PHP license and are unable to   |
    | obtain it through the world-wide-web, please send a note to          |
    | license@php.net so we can mail you a copy immediately.               |
@@ -124,11 +124,7 @@ PHP_FUNCTION(header_register_callback)
 		SG(fci_cache) = empty_fcall_info_cache;
 	}
 
-	/* Don't store callback if headers have already been sent:
-	 * It won't get used and we won't have a chance to release it. */
-	if (!SG(headers_sent)) {
-		ZVAL_COPY(&SG(callback_func), &fci.function_name);
-	}
+	ZVAL_COPY(&SG(callback_func), &fci.function_name);
 
 	RETURN_TRUE;
 }
@@ -344,7 +340,7 @@ SAPI_API char *sapi_get_default_content_type(void)
 
 SAPI_API void sapi_get_default_content_type_header(sapi_header_struct *default_header)
 {
-	uint32_t len;
+    uint32_t len;
 
 	default_header->header = get_default_content_type(sizeof("Content-type: ")-1, &len);
 	default_header->header_len = len;
@@ -489,7 +485,7 @@ static void sapi_send_headers_free(void)
 	}
 }
 
-SAPI_API void sapi_deactivate(void)
+SAPI_API void sapi_deactivate_module(void)
 {
 	zend_llist_destroy(&SG(sapi_headers).headers);
 	if (SG(request_info).request_body) {
@@ -523,6 +519,10 @@ SAPI_API void sapi_deactivate(void)
 	if (sapi_module.deactivate) {
 		sapi_module.deactivate();
 	}
+}
+
+SAPI_API void sapi_deactivate_destroy(void)
+{
 	if (SG(rfc1867_uploaded_files)) {
 		destroy_uploaded_files_hash();
 	}
@@ -535,6 +535,12 @@ SAPI_API void sapi_deactivate(void)
 	SG(headers_sent) = 0;
 	SG(request_info).headers_read = 0;
 	SG(global_request_time) = 0;
+}
+
+SAPI_API void sapi_deactivate(void)
+{
+	sapi_deactivate_module();
+	sapi_deactivate_destroy();
 }
 
 
@@ -579,8 +585,8 @@ static void sapi_update_response_code(int ncode)
 }
 
 /*
- * since zend_llist_del_element only removes one matched item once,
- * we should remove them manually
+ * since zend_llist_del_element only remove one matched item once,
+ * we should remove them by ourself
  */
 static void sapi_remove_header(zend_llist *l, char *name, size_t len) {
 	sapi_header_struct *header;
@@ -610,7 +616,7 @@ static void sapi_remove_header(zend_llist *l, char *name, size_t len) {
 	}
 }
 
-SAPI_API int sapi_add_header_ex(const char *header_line, size_t header_line_len, bool duplicate, bool replace)
+SAPI_API int sapi_add_header_ex(const char *header_line, size_t header_line_len, zend_bool duplicate, zend_bool replace)
 {
 	sapi_header_line ctr = {0};
 	int r;

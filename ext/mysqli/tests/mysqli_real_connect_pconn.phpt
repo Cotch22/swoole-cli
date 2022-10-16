@@ -1,9 +1,8 @@
 --TEST--
 mysqli_real_connect() - persistent connections
---EXTENSIONS--
-mysqli
 --SKIPIF--
 <?php
+require_once('skipif.inc');
 require_once('skipifconnectfailure.inc');
 require_once('connect.inc');
 if (!$IS_MYSQLND)

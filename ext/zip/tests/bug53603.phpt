@@ -1,7 +1,9 @@
 --TEST--
 Bug #53603 (ZipArchive should quiet stat errors)
---EXTENSIONS--
-zip
+--SKIPIF--
+<?php
+if(!extension_loaded('zip')) die('skip');
+?>
 --FILE--
 <?php
 

@@ -38,7 +38,7 @@ const mbfl_encoding mbfl_encoding_pass = {
 	mbfl_no_encoding_pass,
 	"pass",
 	NULL,
-	mbfl_encoding_pass_aliases,
+	(const char *(*)[])&mbfl_encoding_pass_aliases,
 	NULL,
 	0,
 	NULL,

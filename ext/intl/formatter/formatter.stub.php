@@ -1,108 +1,107 @@
 <?php
 
-/** @generate-class-entries */
+/** @generate-function-entries */
 
-/** @not-serializable */
 class NumberFormatter
 {
     public function __construct(string $locale, int $style, ?string $pattern = null) {}
 
     /**
-     * @tentative-return-type
+     * @return NumberFormatter|null
      * @alias numfmt_create
      */
-    public static function create(string $locale, int $style, ?string $pattern = null): ?NumberFormatter {}
+    public static function create(string $locale, int $style, ?string $pattern = null) {}
 
     /**
-     * @tentative-return-type
+     * @return string|false
      * @alias numfmt_format
      */
-    public function format(int|float $num, int $type = NumberFormatter::TYPE_DEFAULT): string|false {}
+    public function format(int|float $num, int $type = NumberFormatter::TYPE_DEFAULT) {}
 
     /**
      * @param int $offset
-     * @tentative-return-type
+     * @return int|float|false
      * @alias numfmt_parse
      */
-    public function parse(string $string, int $type = NumberFormatter::TYPE_DOUBLE, &$offset = null): int|float|false {}
+    public function parse(string $string, int $type = NumberFormatter::TYPE_DOUBLE, &$offset = null) {}
 
     /**
-     * @tentative-return-type
+     * @return string|false
      * @alias numfmt_format_currency
      */
-    public function formatCurrency(float $amount, string $currency): string|false {}
+    public function formatCurrency(float $amount, string $currency) {}
 
     /**
      * @param string $currency
      * @param int $offset
-     * @tentative-return-type
+     * @return float|false
      * @alias numfmt_parse_currency
      */
-    public function parseCurrency(string $string, &$currency, &$offset = null): float|false {}
+    public function parseCurrency(string $string, &$currency, &$offset = null) {}
 
     /**
-     * @tentative-return-type
+     * @return bool
      * @alias numfmt_set_attribute
      */
-    public function setAttribute(int $attribute, int|float $value): bool {}
+    public function setAttribute(int $attribute, int|float $value) {}
 
     /**
-     * @tentative-return-type
+     * @return int|float|false
      * @alias numfmt_get_attribute
      */
-    public function getAttribute(int $attribute): int|float|false {}
+    public function getAttribute(int $attribute) {}
 
     /**
-     * @tentative-return-type
+     * @return bool
      * @alias numfmt_set_text_attribute
      */
-    public function setTextAttribute(int $attribute, string $value): bool {}
+    public function setTextAttribute(int $attribute, string $value) {}
 
     /**
-     * @tentative-return-type
+     * @return string|false
      * @alias numfmt_get_text_attribute
      */
-    public function getTextAttribute(int $attribute): string|false {}
+    public function getTextAttribute(int $attribute) {}
 
     /**
-     * @tentative-return-type
+     * @return bool
      * @alias numfmt_set_symbol
      */
-    public function setSymbol(int $symbol, string $value): bool {}
+    public function setSymbol(int $symbol, string $value) {}
 
     /**
-     * @tentative-return-type
+     * @return string|false
      * @alias numfmt_get_symbol
      */
-    public function getSymbol(int $symbol): string|false {}
+    public function getSymbol(int $symbol) {}
 
     /**
-     * @tentative-return-type
+     * @return bool
      * @alias numfmt_set_pattern
      */
-    public function setPattern(string $pattern): bool {}
+    public function setPattern(string $pattern) {}
 
     /**
-     * @tentative-return-type
+     * @return string|false
      * @alias numfmt_get_pattern
      */
-    public function getPattern(): string|false {}
+    public function getPattern() {}
 
     /**
-     * @tentative-return-type
+     * @return string|false
      * @alias numfmt_get_locale
      */
-    public function getLocale(int $type = ULOC_ACTUAL_LOCALE): string|false {}
+    public function getLocale(int $type = ULOC_ACTUAL_LOCALE) {}
 
     /**
-     * @tentative-return-type
+     * @return int
      * @alias numfmt_get_error_code
      */
-    public function getErrorCode(): int {}
+    public function getErrorCode() {}
 
     /**
-     * @tentative-return-type
+     * @return string
      * @alias numfmt_get_error_message
      */
-    public function getErrorMessage(): string {}
+    public function getErrorMessage() {}
 }

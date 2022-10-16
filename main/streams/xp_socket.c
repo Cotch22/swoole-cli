@@ -5,7 +5,7 @@
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
   | available through the world-wide-web at the following url:           |
-  | https://www.php.net/license/3_01.txt                                 |
+  | http://www.php.net/license/3_01.txt                                  |
   | If you did not receive a copy of the PHP license and are unable to   |
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
@@ -75,8 +75,7 @@ retry:
 	if (didwrite <= 0) {
 		char *estr;
 		int err = php_socket_errno();
-
-		if (PHP_IS_TRANSIENT_ERROR(err)) {
+		if (err == EWOULDBLOCK || err == EAGAIN) {
 			if (sock->is_blocked) {
 				int retval;
 
@@ -163,14 +162,14 @@ static ssize_t php_sockop_read(php_stream *stream, char *buf, size_t count)
 	if (sock->is_blocked) {
 		php_sock_stream_wait_for_data(stream, sock);
 		if (sock->timeout_event)
-			return -1;
+			return 0;
 	}
 
 	nr_bytes = recv(sock->socket, buf, XP_SOCK_BUF_SIZE(count), (sock->is_blocked && sock->timeout.tv_sec != -1) ? MSG_DONTWAIT : 0);
 	err = php_socket_errno();
 
 	if (nr_bytes < 0) {
-		if (PHP_IS_TRANSIENT_ERROR(err)) {
+		if (err == EAGAIN || err == EWOULDBLOCK) {
 			nr_bytes = 0;
 		} else {
 			stream->eof = 1;
@@ -816,7 +815,7 @@ static inline int php_tcp_sockop_accept(php_stream *stream, php_netstream_data_t
 		php_stream_xport_param *xparam STREAMS_DC)
 {
 	int clisock;
-	bool nodelay = 0;
+	zend_bool nodelay = 0;
 	zval *tmpzval = NULL;
 
 	xparam->outputs.client = NULL;
@@ -841,6 +840,10 @@ static inline int php_tcp_sockop_accept(php_stream *stream, php_netstream_data_t
 
 		memcpy(clisockdata, sock, sizeof(*clisockdata));
 		clisockdata->socket = clisock;
+#ifdef __linux__
+		/* O_NONBLOCK is not inherited on Linux */
+		clisockdata->is_blocked = 1;
+#endif
 
 		xparam->outputs.client = php_stream_alloc_rel(stream->ops, clisockdata, NULL, "r+");
 		if (xparam->outputs.client) {

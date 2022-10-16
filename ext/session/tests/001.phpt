@@ -1,7 +1,5 @@
 --TEST--
 session object serialization
---EXTENSIONS--
-session
 --SKIPIF--
 <?php include('skipif.inc'); ?>
 --INI--

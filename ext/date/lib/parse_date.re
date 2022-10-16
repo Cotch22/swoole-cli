@@ -29,7 +29,6 @@
 #include <ctype.h>
 #include <math.h>
 #include <assert.h>
-#include <limits.h>
 
 #if defined(_MSC_VER)
 # define strtoll(s, f, b) _atoi64(s)
@@ -167,14 +166,6 @@ static const timelib_tz_lookup_table timelib_timezone_utc[] = {
 	{ "utc", 0, 0, "UTC" },
 };
 
-#if defined(_POSIX_TZNAME_MAX)
-# define MAX_ABBR_LEN _POSIX_TZNAME_MAX
-#elif defined(TZNAME_MAX)
-# define MAX_ABBR_LEN TZNAME_MAX
-#else
-# define MAX_ABBR_LEN 6
-#endif
-
 static timelib_relunit const timelib_relunit_lookup[] = {
 	{ "ms",           TIMELIB_MICROSEC, 1000 },
 	{ "msec",         TIMELIB_MICROSEC, 1000 },
@@ -211,25 +202,18 @@ static timelib_relunit const timelib_relunit_lookup[] = {
 	{ "year",        TIMELIB_YEAR,    1 },
 	{ "years",       TIMELIB_YEAR,    1 },
 
-	{ "mondays",     TIMELIB_WEEKDAY, 1 },
 	{ "monday",      TIMELIB_WEEKDAY, 1 },
 	{ "mon",         TIMELIB_WEEKDAY, 1 },
-	{ "tuesdays",    TIMELIB_WEEKDAY, 2 },
 	{ "tuesday",     TIMELIB_WEEKDAY, 2 },
 	{ "tue",         TIMELIB_WEEKDAY, 2 },
-	{ "wednesdays",  TIMELIB_WEEKDAY, 3 },
 	{ "wednesday",   TIMELIB_WEEKDAY, 3 },
 	{ "wed",         TIMELIB_WEEKDAY, 3 },
-	{ "thursdays",   TIMELIB_WEEKDAY, 4 },
 	{ "thursday",    TIMELIB_WEEKDAY, 4 },
 	{ "thu",         TIMELIB_WEEKDAY, 4 },
-	{ "fridays",     TIMELIB_WEEKDAY, 5 },
 	{ "friday",      TIMELIB_WEEKDAY, 5 },
 	{ "fri",         TIMELIB_WEEKDAY, 5 },
-	{ "saturdays",   TIMELIB_WEEKDAY, 6 },
 	{ "saturday",    TIMELIB_WEEKDAY, 6 },
 	{ "sat",         TIMELIB_WEEKDAY, 6 },
-	{ "sundays",     TIMELIB_WEEKDAY, 0 },
 	{ "sunday",      TIMELIB_WEEKDAY, 0 },
 	{ "sun",         TIMELIB_WEEKDAY, 0 },
 
@@ -347,57 +331,44 @@ uchar *fill(Scanner *s, uchar *cursor){
 }
 #endif
 
-static timelib_error_message *alloc_error_message(timelib_error_message **messages, int *count)
-{
-	/* Realloc in power of two increments */
-	int is_pow2 = (*count & (*count - 1)) == 0;
-
-	if (is_pow2) {
-		size_t alloc_size = *count ? (*count * 2) : 1;
-
-		*messages = timelib_realloc(*messages, alloc_size * sizeof(timelib_error_message));
-	}
-	return *messages + (*count)++;
-}
-
 static void add_warning(Scanner *s, int error_code, char *error)
 {
-	timelib_error_message *message = alloc_error_message(&s->errors->warning_messages, &s->errors->warning_count);
-
-	message->error_code = error_code;
-	message->position = s->tok ? s->tok - s->str : 0;
-	message->character = s->tok ? *s->tok : 0;
-	message->message = timelib_strdup(error);
+	s->errors->warning_count++;
+	s->errors->warning_messages = timelib_realloc(s->errors->warning_messages, s->errors->warning_count * sizeof(timelib_error_message));
+	s->errors->warning_messages[s->errors->warning_count - 1].error_code = error_code;
+	s->errors->warning_messages[s->errors->warning_count - 1].position = s->tok ? s->tok - s->str : 0;
+	s->errors->warning_messages[s->errors->warning_count - 1].character = s->tok ? *s->tok : 0;
+	s->errors->warning_messages[s->errors->warning_count - 1].message = timelib_strdup(error);
 }
 
 static void add_error(Scanner *s, int error_code, char *error)
 {
-	timelib_error_message *message = alloc_error_message(&s->errors->error_messages, &s->errors->error_count);
-
-	message->error_code = error_code;
-	message->position = s->tok ? s->tok - s->str : 0;
-	message->character = s->tok ? *s->tok : 0;
-	message->message = timelib_strdup(error);
+	s->errors->error_count++;
+	s->errors->error_messages = timelib_realloc(s->errors->error_messages, s->errors->error_count * sizeof(timelib_error_message));
+	s->errors->error_messages[s->errors->error_count - 1].error_code = error_code;
+	s->errors->error_messages[s->errors->error_count - 1].position = s->tok ? s->tok - s->str : 0;
+	s->errors->error_messages[s->errors->error_count - 1].character = s->tok ? *s->tok : 0;
+	s->errors->error_messages[s->errors->error_count - 1].message = timelib_strdup(error);
 }
 
 static void add_pbf_warning(Scanner *s, int error_code, char *error, const char *sptr, const char *cptr)
 {
-	timelib_error_message *message = alloc_error_message(&s->errors->warning_messages, &s->errors->warning_count);
-
-	message->error_code = error_code;
-	message->position = cptr - sptr;
-	message->character = *cptr;
-	message->message = timelib_strdup(error);
+	s->errors->warning_count++;
+	s->errors->warning_messages = timelib_realloc(s->errors->warning_messages, s->errors->warning_count * sizeof(timelib_error_message));
+	s->errors->warning_messages[s->errors->warning_count - 1].error_code = error_code;
+	s->errors->warning_messages[s->errors->warning_count - 1].position = cptr - sptr;
+	s->errors->warning_messages[s->errors->warning_count - 1].character = *cptr;
+	s->errors->warning_messages[s->errors->warning_count - 1].message = timelib_strdup(error);
 }
 
 static void add_pbf_error(Scanner *s, int error_code, char *error, const char *sptr, const char *cptr)
 {
-	timelib_error_message *message = alloc_error_message(&s->errors->error_messages, &s->errors->error_count);
-
-	message->error_code = error_code;
-	message->position = cptr - sptr;
-	message->character = *cptr;
-	message->message = timelib_strdup(error);
+	s->errors->error_count++;
+	s->errors->error_messages = timelib_realloc(s->errors->error_messages, s->errors->error_count * sizeof(timelib_error_message));
+	s->errors->error_messages[s->errors->error_count - 1].error_code = error_code;
+	s->errors->error_messages[s->errors->error_count - 1].position = cptr - sptr;
+	s->errors->error_messages[s->errors->error_count - 1].character = *cptr;
+	s->errors->error_messages[s->errors->error_count - 1].message = timelib_strdup(error);
 }
 
 static timelib_sll timelib_meridian(const char **ptr, timelib_sll h)
@@ -763,7 +734,7 @@ static timelib_long timelib_lookup_abbr(const char **ptr, int *dst, char **tz_ab
 	word = timelib_calloc(1, end - begin + 1);
 	memcpy(word, begin, end - begin);
 
-	if (end - begin < MAX_ABBR_LEN && (tp = abbr_search(word, -1, 0))) {
+	if ((tp = abbr_search(word, -1, 0))) {
 		value = tp->gmtoffset;
 		*dst = tp->type;
 		value -= tp->type * 3600;
@@ -820,22 +791,6 @@ static timelib_long timelib_parse_tz_cor(const char **ptr, int *tz_not_found)
 			*tz_not_found = 0;
 			tmp = sHOUR(strtol(begin, NULL, 10)) + sMIN(strtol(begin + 3, NULL, 10));
 			return tmp;
-
-		case 6: /* HHMMSS */
-			*tz_not_found = 0;
-			tmp = strtol(begin, NULL, 10);
-			tmp = sHOUR(tmp / 10000) + sMIN((tmp / 100) % 100) + (tmp % 100);
-			return tmp;
-
-		case 8: /* HH:MM:SS */
-			if (begin[2] != ':' || begin[5] != ':') {
-				break;
-			}
-
-			*tz_not_found = 0;
-			tmp = sHOUR(strtol(begin, NULL, 10)) + sMIN(strtol(begin + 3, NULL, 10)) + strtol(begin + 6, NULL, 10);
-			return tmp;
-
 	}
 	return 0;
 }
@@ -968,7 +923,7 @@ second = minute | "60";
 secondlz = minutelz | "60";
 meridian = ([AaPp] "."? [Mm] "."?) [\000\t ];
 tz = "("? [A-Za-z]{1,6} ")"? | [A-Z][a-z]+([_/-][A-Za-z]+)+;
-tzcorrection = "GMT"? [+-] ((hour24 (":"? minute)?) | (hour24lz minutelz secondlz) | (hour24lz ":" minutelz ":" secondlz));
+tzcorrection = "GMT"? [+-] hour24 ":"? minute?;
 
 daysuf = "st" | "nd" | "rd" | "th";
 
@@ -986,11 +941,10 @@ weekofyear = "0"[1-9] | [1-4][0-9] | "5"[0-3];
 monthlz = "0" [0-9] | "1" [0-2];
 daylz   = "0" [0-9] | [1-2][0-9] | "3" [01];
 
-dayfulls = 'sundays' | 'mondays' | 'tuesdays' | 'wednesdays' | 'thursdays' | 'fridays' | 'saturdays';
 dayfull = 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
 dayabbr = 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 dayspecial = 'weekday' | 'weekdays';
-daytext = dayfulls | dayfull | dayabbr | dayspecial;
+daytext = dayfull | dayabbr | dayspecial;
 
 monthfull = 'january' | 'february' | 'march' | 'april' | 'may' | 'june' | 'july' | 'august' | 'september' | 'october' | 'november' | 'december';
 monthabbr = 'jan' | 'feb' | 'mar' | 'apr' | 'may' | 'jun' | 'jul' | 'aug' | 'sep' | 'sept' | 'oct' | 'nov' | 'dec';
@@ -1002,7 +956,6 @@ timetiny12 = hour12 space? meridian;
 timeshort12 = hour12[:.]minutelz space? meridian;
 timelong12 = hour12[:.]minute[:.]secondlz space? meridian;
 
-timetiny24 = 't' hour24;
 timeshort24 = 't'? hour24[:.]minute;
 timelong24 =  't'? hour24[:.]minute[:.]second;
 iso8601long =  't'? hour24 [:.] minute [:.] second frac;
@@ -1041,7 +994,7 @@ soap             = year4 "-" monthlz "-" daylz "T" hour24lz ":" minutelz ":" sec
 xmlrpc           = year4 monthlz daylz "T" hour24 ":" minutelz ":" secondlz;
 xmlrpcnocolon    = year4 monthlz daylz 't' hour24 minutelz secondlz;
 wddx             = year4 "-" month "-" day "T" hour24 ":" minute ":" second;
-pgydotd          = year4 [.-]? dayofyear;
+pgydotd          = year4 "."? dayofyear;
 pgtextshort      = monthabbr "-" daylz "-" year;
 pgtextreverse    = year "-" monthabbr "-" daylz;
 mssqltime        = hour12 ":" minutelz ":" secondlz [:.] [0-9]+ meridian;
@@ -1079,7 +1032,7 @@ relative = relnumber space? (reltextunit | 'week' );
 relativetext = (reltextnumber|reltexttext) space reltextunit;
 relativetextweek = reltexttext space 'week';
 
-weekdayof        = (reltextnumber|reltexttext) space (dayfulls|dayfull|dayabbr) space 'of';
+weekdayof        = (reltextnumber|reltexttext) space (dayfull|dayabbr) space 'of';
 
 */
 
@@ -1168,10 +1121,8 @@ weekdayof        = (reltextnumber|reltexttext) space (dayfulls|dayfull|dayabbr) 
 
 	timestampms
 	{
-		timelib_sll i;
-		timelib_ull us;
+		timelib_ull i, us;
 		const char *ptr_before;
-		bool is_negative;
 
 		TIMELIB_INIT;
 		TIMELIB_HAVE_RELATIVE();
@@ -1179,16 +1130,11 @@ weekdayof        = (reltextnumber|reltexttext) space (dayfulls|dayfull|dayabbr) 
 		TIMELIB_UNHAVE_TIME();
 		TIMELIB_HAVE_TZ();
 
-		is_negative = *(ptr + 1) == '-';
-
 		i = timelib_get_signed_nr(s, &ptr, 24);
 
 		ptr_before = ptr;
 		us = timelib_get_signed_nr(s, &ptr, 6);
 		us = us * pow(10, 7 - (ptr - ptr_before));
-		if (is_negative) {
-			us *= -1;
-		}
 
 		s->time->y = 1970;
 		s->time->m = 1;
@@ -1305,21 +1251,19 @@ weekdayof        = (reltextnumber|reltexttext) space (dayfulls|dayfull|dayabbr) 
 		return TIMELIB_TIME24_WITH_ZONE;
 	}
 
-	timetiny24 | timeshort24 | timelong24 /* | iso8601short | iso8601norm */ | iso8601long /*| iso8601shorttz | iso8601normtz | iso8601longtz*/
+	timeshort24 | timelong24 /* | iso8601short | iso8601norm */ | iso8601long /*| iso8601shorttz | iso8601normtz | iso8601longtz*/
 	{
 		int tz_not_found;
-		DEBUG_OUTPUT("timetiny24 | timeshort24 | timelong24 | iso8601long");
+		DEBUG_OUTPUT("timeshort24 | timelong24 | iso8601long");
 		TIMELIB_INIT;
 		TIMELIB_HAVE_TIME();
 		s->time->h = timelib_get_nr(&ptr, 2);
+		s->time->i = timelib_get_nr(&ptr, 2);
 		if (*ptr == ':' || *ptr == '.') {
-			s->time->i = timelib_get_nr(&ptr, 2);
-			if (*ptr == ':' || *ptr == '.') {
-				s->time->s = timelib_get_nr(&ptr, 2);
+			s->time->s = timelib_get_nr(&ptr, 2);
 
-				if (*ptr == '.') {
-					s->time->us = timelib_get_frac_nr(&ptr);
-				}
+			if (*ptr == '.') {
+				s->time->us = timelib_get_frac_nr(&ptr);
 			}
 		}
 
@@ -2276,7 +2220,7 @@ timelib_time *timelib_parse_from_format_with_map(const char *format, const char 
 					break;
 				}
 				if (s->time->h > 12) {
-					add_pbf_error(s, TIMELIB_ERR_HOUR_LARGER_THAN_12, "Hour cannot be higher than 12", string, begin);
+					add_pbf_error(s, TIMELIB_ERR_HOUR_LARGER_THAN_12, "Hour can not be higher than 12", string, begin);
 					break;
 				}
 
@@ -2522,7 +2466,7 @@ timelib_time *timelib_parse_from_format_with_map(const char *format, const char 
 					break;
 
 				default:
-					add_pbf_error(s, TIMELIB_ERR_DATA_MISSING, "Not enough data available to satisfy format", string, ptr);
+					add_pbf_error(s, TIMELIB_ERR_DATA_MISSING, "Data missing", string, ptr);
 					done = 1;
 			}
 			fptr++;

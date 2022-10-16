@@ -1,9 +1,8 @@
 --TEST--
 mysqli_change_user() - LAST_INSERT_ID() - http://bugs.mysql.com/bug.php?id=45184?
---EXTENSIONS--
-mysqli
 --SKIPIF--
 <?php
+require_once('skipif.inc');
 require_once('skipifconnectfailure.inc');
 require_once('connect.inc');
 

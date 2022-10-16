@@ -1,7 +1,7 @@
 --TEST--
 datefmt_format_code() with relative formats
---EXTENSIONS--
-intl
+--SKIPIF--
+<?php if (!extension_loaded("intl")) print "skip"; ?>
 --FILE--
 <?php
 

@@ -23,7 +23,6 @@
 #include "zend_alloc.h"
 #include "zend_operators.h"
 #include "zend_strtod.h"
-#include "zend_modules.h"
 
 static HashTable *registered_zend_ini_directives;
 
@@ -195,7 +194,7 @@ ZEND_API void zend_ini_sort_entries(void) /* {{{ */
 /*
  * Registration / unregistration
  */
-ZEND_API zend_result zend_register_ini_entries_ex(const zend_ini_entry_def *ini_entry, int module_number, int module_type) /* {{{ */
+ZEND_API zend_result zend_register_ini_entries(const zend_ini_entry_def *ini_entry, int module_number) /* {{{ */
 {
 	zend_ini_entry *p;
 	zval *default_value;
@@ -211,10 +210,7 @@ ZEND_API zend_result zend_register_ini_entries_ex(const zend_ini_entry_def *ini_
 	 * lead to death.
 	 */
 	if (directives != EG(ini_directives)) {
-		ZEND_ASSERT(module_type == MODULE_TEMPORARY);
 		directives = EG(ini_directives);
-	} else {
-		ZEND_ASSERT(module_type == MODULE_PERSISTENT);
 	}
 #endif
 
@@ -238,11 +234,11 @@ ZEND_API zend_result zend_register_ini_entries_ex(const zend_ini_entry_def *ini_
 			if (p->name) {
 				zend_string_release_ex(p->name, 1);
 			}
-			zend_unregister_ini_entries_ex(module_number, module_type);
+			zend_unregister_ini_entries(module_number);
 			return FAILURE;
 		}
 		if (((default_value = zend_get_configuration_directive(p->name)) != NULL) &&
-		    (!p->on_modify || p->on_modify(p, Z_STR_P(default_value), p->mh_arg1, p->mh_arg2, p->mh_arg3, ZEND_INI_STAGE_STARTUP) == SUCCESS)) {
+            (!p->on_modify || p->on_modify(p, Z_STR_P(default_value), p->mh_arg1, p->mh_arg2, p->mh_arg3, ZEND_INI_STAGE_STARTUP) == SUCCESS)) {
 
 			p->value = zend_new_interned_string(zend_string_copy(Z_STR_P(default_value)));
 		} else {
@@ -259,46 +255,9 @@ ZEND_API zend_result zend_register_ini_entries_ex(const zend_ini_entry_def *ini_
 }
 /* }}} */
 
-ZEND_API zend_result zend_register_ini_entries(const zend_ini_entry_def *ini_entry, int module_number) /* {{{ */
-{
-	zend_module_entry *module;
-
-	/* Module is likely to be the last one in the list */
-	ZEND_HASH_REVERSE_FOREACH_PTR(&module_registry, module) {
-		if (module->module_number == module_number) {
-			return zend_register_ini_entries_ex(ini_entry, module_number, module->type);
-		}
-	} ZEND_HASH_FOREACH_END();
-
-	return FAILURE;
-}
-/* }}} */
-
-ZEND_API void zend_unregister_ini_entries_ex(int module_number, int module_type) /* {{{ */
-{
-	static HashTable *ini_directives;
-
-	if (module_type == MODULE_TEMPORARY) {
-		ini_directives = EG(ini_directives);
-	} else {
-		ini_directives = registered_zend_ini_directives;
-	}
-
-	zend_hash_apply_with_argument(ini_directives, zend_remove_ini_entries, (void *) &module_number);
-}
-/* }}} */
-
 ZEND_API void zend_unregister_ini_entries(int module_number) /* {{{ */
 {
-	zend_module_entry *module;
-
-	/* Module is likely to be the last one in the list */
-	ZEND_HASH_REVERSE_FOREACH_PTR(&module_registry, module) {
-		if (module->module_number == module_number) {
-			zend_unregister_ini_entries_ex(module_number, module->type);
-			return;
-		}
-	} ZEND_HASH_FOREACH_END();
+	zend_hash_apply_with_argument(registered_zend_ini_directives, zend_remove_ini_entries, (void *) &module_number);
 }
 /* }}} */
 
@@ -325,8 +284,8 @@ ZEND_API zend_result zend_alter_ini_entry(zend_string *name, zend_string *new_va
 
 ZEND_API zend_result zend_alter_ini_entry_chars(zend_string *name, const char *value, size_t value_length, int modify_type, int stage) /* {{{ */
 {
-	zend_result ret;
-	zend_string *new_value;
+    zend_result ret;
+    zend_string *new_value;
 
 	new_value = zend_string_init(value, value_length, !(stage & ZEND_INI_STAGE_IN_REQUEST));
 	ret = zend_alter_ini_entry_ex(name, new_value, modify_type, stage, 0);
@@ -337,8 +296,8 @@ ZEND_API zend_result zend_alter_ini_entry_chars(zend_string *name, const char *v
 
 ZEND_API zend_result zend_alter_ini_entry_chars_ex(zend_string *name, const char *value, size_t value_length, int modify_type, int stage, int force_change) /* {{{ */
 {
-	zend_result ret;
-	zend_string *new_value;
+    zend_result ret;
+    zend_string *new_value;
 
 	new_value = zend_string_init(value, value_length, !(stage & ZEND_INI_STAGE_IN_REQUEST));
 	ret = zend_alter_ini_entry_ex(name, new_value, modify_type, stage, force_change);
@@ -352,7 +311,7 @@ ZEND_API zend_result zend_alter_ini_entry_ex(zend_string *name, zend_string *new
 	zend_ini_entry *ini_entry;
 	zend_string *duplicate;
 	uint8_t modifiable;
-	bool modified;
+	zend_bool modified;
 
 	if ((ini_entry = zend_hash_find_ptr(EG(ini_directives), name)) == NULL) {
 		return FAILURE;
@@ -472,7 +431,7 @@ ZEND_API double zend_ini_double(const char *name, size_t name_length, int orig) 
 }
 /* }}} */
 
-ZEND_API char *zend_ini_string_ex(const char *name, size_t name_length, int orig, bool *exists) /* {{{ */
+ZEND_API char *zend_ini_string_ex(const char *name, size_t name_length, int orig, zend_bool *exists) /* {{{ */
 {
 	zend_ini_entry *ini_entry;
 
@@ -498,7 +457,7 @@ ZEND_API char *zend_ini_string_ex(const char *name, size_t name_length, int orig
 
 ZEND_API char *zend_ini_string(const char *name, size_t name_length, int orig) /* {{{ */
 {
-	bool exists = 1;
+	zend_bool exists = 1;
 	char *return_value;
 
 	return_value = zend_ini_string_ex(name, name_length, orig, &exists);
@@ -524,12 +483,11 @@ ZEND_API zend_string *zend_ini_get_value(zend_string *name) /* {{{ */
 }
 /* }}} */
 
-ZEND_API bool zend_ini_parse_bool(zend_string *str)
+ZEND_API zend_bool zend_ini_parse_bool(zend_string *str)
 {
-	if (zend_string_equals_literal_ci(str, "true")
-			|| zend_string_equals_literal_ci(str, "yes")
-			|| zend_string_equals_literal_ci(str, "on")
-	) {
+	if ((ZSTR_LEN(str) == 4 && strcasecmp(ZSTR_VAL(str), "true") == 0)
+	  || (ZSTR_LEN(str) == 3 && strcasecmp(ZSTR_VAL(str), "yes") == 0)
+	  || (ZSTR_LEN(str) == 2 && strcasecmp(ZSTR_VAL(str), "on") == 0)) {
 		return 1;
 	} else {
 		return atoi(ZSTR_VAL(str)) != 0;
@@ -615,7 +573,7 @@ ZEND_INI_DISP(display_link_numbers) /* {{{ */
 /* Standard message handlers */
 ZEND_API ZEND_INI_MH(OnUpdateBool) /* {{{ */
 {
-	bool *p = (bool *) ZEND_INI_GET_ADDR();
+	zend_bool *p = (zend_bool *) ZEND_INI_GET_ADDR();
 	*p = zend_ini_parse_bool(new_value);
 	return SUCCESS;
 }

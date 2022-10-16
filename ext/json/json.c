@@ -5,7 +5,7 @@
   | This source file is subject to version 3.01 of the PHP license,      |
   | that is bundled with this package in the file LICENSE, and is        |
   | available through the world-wide-web at the following url:           |
-  | https://www.php.net/license/3_01.txt                                 |
+  | http://www.php.net/license/3_01.txt                                  |
   | If you did not receive a copy of the PHP license and are unable to   |
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
@@ -44,9 +44,13 @@ PHP_JSON_API ZEND_DECLARE_MODULE_GLOBALS(json)
 /* {{{ MINIT */
 static PHP_MINIT_FUNCTION(json)
 {
-	php_json_serializable_ce = register_class_JsonSerializable();
+	zend_class_entry ce;
 
-	php_json_exception_ce = register_class_JsonException(zend_ce_exception);
+	INIT_CLASS_ENTRY(ce, "JsonSerializable", class_JsonSerializable_methods);
+	php_json_serializable_ce = zend_register_internal_interface(&ce);
+
+	INIT_CLASS_ENTRY(ce, "JsonException", NULL);
+	php_json_exception_ce = zend_register_internal_class_ex(&ce, zend_ce_exception);
 
 	/* options for json_encode */
 	PHP_JSON_REGISTER_CONSTANT("JSON_HEX_TAG",  PHP_JSON_HEX_TAG);
@@ -83,7 +87,6 @@ static PHP_MINIT_FUNCTION(json)
 	PHP_JSON_REGISTER_CONSTANT("JSON_ERROR_UNSUPPORTED_TYPE", PHP_JSON_ERROR_UNSUPPORTED_TYPE);
 	PHP_JSON_REGISTER_CONSTANT("JSON_ERROR_INVALID_PROPERTY_NAME", PHP_JSON_ERROR_INVALID_PROPERTY_NAME);
 	PHP_JSON_REGISTER_CONSTANT("JSON_ERROR_UTF16", PHP_JSON_ERROR_UTF16);
-	PHP_JSON_REGISTER_CONSTANT("JSON_ERROR_NON_BACKED_ENUM", PHP_JSON_ERROR_NON_BACKED_ENUM);
 
 	return SUCCESS;
 }
@@ -188,8 +191,6 @@ static const char *php_json_get_error_msg(php_json_error_code error_code) /* {{{
 			return "The decoded property name is invalid";
 		case PHP_JSON_ERROR_UTF16:
 			return "Single unpaired UTF-16 surrogate in unicode escape";
-		case PHP_JSON_ERROR_NON_BACKED_ENUM:
-			return "Non-backed enums have no default serialization";
 		default:
 			return "Unknown error";
 	}
@@ -264,15 +265,15 @@ PHP_FUNCTION(json_decode)
 {
 	char *str;
 	size_t str_len;
-	bool assoc = 0; /* return JS objects as PHP objects by default */
-	bool assoc_null = 1;
+	zend_bool assoc = 0; /* return JS objects as PHP objects by default */
+	zend_bool assoc_null = 1;
 	zend_long depth = PHP_JSON_PARSER_DEFAULT_DEPTH;
 	zend_long options = 0;
 
 	ZEND_PARSE_PARAMETERS_START(1, 4)
 		Z_PARAM_STRING(str, str_len)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_BOOL_OR_NULL(assoc, assoc_null)
+		Z_PARAM_BOOL_EX(assoc, assoc_null, 1, 0)
 		Z_PARAM_LONG(depth)
 		Z_PARAM_LONG(options)
 	ZEND_PARSE_PARAMETERS_END();

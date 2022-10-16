@@ -1,7 +1,9 @@
 --TEST--
 Bug #73155 (imagegd2() writes wrong chunk sizes on boundaries)
---EXTENSIONS--
-gd
+--SKIPIF--
+<?php
+if (!extension_loaded('gd')) die('skip gd extension not available');
+?>
 --FILE--
 <?php
 $im = imagecreate(64, 64);

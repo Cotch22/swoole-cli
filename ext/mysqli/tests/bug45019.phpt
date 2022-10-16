@@ -1,9 +1,8 @@
 --TEST--
 Bug #45019 (Segmentation fault with SELECT ? and UNION)
---EXTENSIONS--
-mysqli
 --SKIPIF--
 <?php
+require_once('skipif.inc');
 require_once('skipifconnectfailure.inc');
 ?>
 --FILE--

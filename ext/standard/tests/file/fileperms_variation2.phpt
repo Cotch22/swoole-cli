@@ -18,6 +18,7 @@ $filenames = array(
   "",
   TRUE,
   FALSE,
+  NULL,
 
   /* scalars */
   1234,
@@ -46,6 +47,7 @@ bool(false)
 bool(false)
 
 Warning: fileperms(): stat failed for 1 in %s on line %d
+bool(false)
 bool(false)
 bool(false)
 

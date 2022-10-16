@@ -1,9 +1,8 @@
 --TEST--
 INSERT and packet overflow
---EXTENSIONS--
-mysqli
 --SKIPIF--
 <?php
+require_once('skipif.inc');
 require_once('skipifconnectfailure.inc');
 
 if (!$link = my_mysqli_connect($host, $user, $passwd, $db, $port, $socket))
@@ -113,13 +112,6 @@ memory_limit=256M
     mysqli_close($link);
 
     print "done!";
-?>
---CLEAN--
-<?php
-require_once 'connect.inc';
-$link = new mysqli($host, $user, $passwd, $db, $port, $socket);
-$link->query('DROP TABLE test__mysqli_insert_packet_overflow');
-$link->close();
 ?>
 --EXPECT--
 done!

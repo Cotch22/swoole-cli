@@ -1,9 +1,8 @@
 --TEST--
 mysqli_kill()
---EXTENSIONS--
-mysqli
 --SKIPIF--
 <?php
+require_once('skipif.inc');
 require_once('skipifconnectfailure.inc');
 ?>
 --FILE--
@@ -12,8 +11,9 @@ require_once('skipifconnectfailure.inc');
 
     require('table.inc');
 
+    // Zend will cast the NULL to 0
     try {
-        mysqli_kill($link, 0);
+        mysqli_kill($link, null);
     } catch (\ValueError $e) {
         echo $e->getMessage() . \PHP_EOL;
     }

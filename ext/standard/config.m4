@@ -267,27 +267,16 @@ int main() {
 ])])
 
 
-PHP_ARG_WITH([external-libcrypt],
-  [for external libcrypt or libxcrypt],
-  [AS_HELP_STRING([--with-external-libcrypt],
-    [Use external libcrypt or libxcrypt])],
-  [no],
-  [no])
-
 dnl
 dnl If one of them is missing, use our own implementation, portable code is then possible
 dnl
-dnl This is currently enabled by default
-if test "$ac_cv_crypt_blowfish" = "no" || test "$ac_cv_crypt_des" = "no" || test "$ac_cv_crypt_ext_des" = "no" || test "$ac_cv_crypt_md5" = "no" || test "$ac_cv_crypt_sha512" = "no" || test "$ac_cv_crypt_sha256" = "no" || test "$ac_cv_func_crypt_r" != "yes" || test "$PHP_EXTERNAL_LIBCRYPT" = "no"; then
-  if test "$PHP_EXTERNAL_LIBCRYPT" = "no"; then
-    AC_DEFINE_UNQUOTED(PHP_USE_PHP_CRYPT_R, 1, [Whether PHP has to use its own crypt_r])
+dnl TODO This is currently always enabled
+if test "$ac_cv_crypt_blowfish" = "no" || test "$ac_cv_crypt_des" = "no" || test "$ac_cv_crypt_ext_des" = "no" || test "$ac_cv_crypt_md5" = "no" || test "$ac_cv_crypt_sha512" = "no" || test "$ac_cv_crypt_sha256" = "no" || test "$ac_cv_func_crypt_r" != "yes" || true; then
+  AC_DEFINE_UNQUOTED(PHP_USE_PHP_CRYPT_R, 1, [Whether PHP has to use its own crypt_r for blowfish, des, ext des and md5])
 
-    PHP_ADD_SOURCES(PHP_EXT_DIR(standard), crypt_freesec.c crypt_blowfish.c crypt_sha512.c crypt_sha256.c php_crypt_r.c)
-   else
-    AC_MSG_ERROR([Cannot use external libcrypt as some algo are missing])
-   fi
+  PHP_ADD_SOURCES(PHP_EXT_DIR(standard), crypt_freesec.c crypt_blowfish.c crypt_sha512.c crypt_sha256.c php_crypt_r.c)
 else
-  AC_DEFINE_UNQUOTED(PHP_USE_PHP_CRYPT_R, 0, [Whether PHP has to use its own crypt_r])
+  AC_DEFINE_UNQUOTED(PHP_USE_PHP_CRYPT_R, 0, [Whether PHP has to use its own crypt_r for blowfish, des and ext des])
 fi
 
 dnl
@@ -306,17 +295,7 @@ if test "$ac_cv_attribute_aligned" = "yes"; then
   AC_DEFINE([HAVE_ATTRIBUTE_ALIGNED], 1, [whether the compiler supports __attribute__ ((__aligned__))])
 fi
 
-if test "$cross_compiling" = yes ; then
-  case $host_alias in
-    *linux*)
-      AC_DEFINE([HAVE_FNMATCH], 1,
-		     [Define to 1 if your system has a working POSIX `fnmatch'
-		      function.])
-      ;;
-  esac
-else
-  AC_FUNC_FNMATCH
-fi
+AC_FUNC_FNMATCH
 
 dnl
 dnl Check if there is a support means of creating a new process and defining
@@ -407,19 +386,44 @@ dnl
 AC_CHECK_DECLS([arc4random_buf])
 
 dnl
+dnl Check for CCRandomGenerateBytes
+dnl header absent in previous macOs releases
+dnl
+AC_CHECK_HEADERS([CommonCrypto/CommonRandom.h])
+
+dnl
 dnl Check for argon2
 dnl
 PHP_ARG_WITH([password-argon2],
   [for Argon2 support],
-  [AS_HELP_STRING([[--with-password-argon2]],
-    [Include Argon2 support in password_*])])
+  [AS_HELP_STRING([[--with-password-argon2[=DIR]]],
+    [Include Argon2 support in password_*. DIR is the Argon2 shared library
+    path])])
 
 if test "$PHP_PASSWORD_ARGON2" != "no"; then
-  PKG_CHECK_MODULES([ARGON2], [libargon2])
-  PHP_EVAL_INCLINE($ARGON2_CFLAGS)
-  PHP_EVAL_LIBLINE($ARGON2_LIBS)
+  AC_MSG_CHECKING([for Argon2 library])
+  for i in $PHP_PASSWORD_ARGON2 /usr /usr/local ; do
+    if test -r $i/include/argon2.h; then
+      ARGON2_DIR=$i;
+      AC_MSG_RESULT(found in $i)
+      break
+    fi
+  done
 
-  AC_DEFINE(HAVE_ARGON2LIB, 1, [ ])
+  if test -z "$ARGON2_DIR"; then
+    AC_MSG_RESULT([not found])
+    AC_MSG_ERROR([Please ensure the argon2 header and library are installed])
+  fi
+
+  PHP_ADD_LIBRARY_WITH_PATH(argon2, $ARGON2_DIR/$PHP_LIBDIR)
+  PHP_ADD_INCLUDE($ARGON2_DIR/include)
+
+  AC_CHECK_LIB(argon2, argon2id_hash_raw, [
+    LIBS="$LIBS -largon2"
+    AC_DEFINE(HAVE_ARGON2LIB, 1, [ Define to 1 if you have the <argon2.h> header file ])
+  ], [
+    AC_MSG_ERROR([Problem with libargon2.(a|so). Please verify that Argon2 header and libraries >= 20161029 are installed])
+  ])
 fi
 
 dnl

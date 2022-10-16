@@ -1,7 +1,5 @@
 --TEST--
 Don't optimize object -> iterable
---EXTENSIONS--
-opcache
 --FILE--
 <?php
 

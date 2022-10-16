@@ -1,7 +1,9 @@
 --TEST--
 openssl_csr_get_public_key() tests
---EXTENSIONS--
-openssl
+--SKIPIF--
+<?php
+if (!extension_loaded("openssl")) die("skip");
+?>
 --FILE--
 <?php
 $config = __DIR__ . DIRECTORY_SEPARATOR . 'openssl.cnf';
@@ -23,7 +25,7 @@ $dn = array(
 );
 
 $args = array(
-    "digest_alg" => "sha256",
+    "digest_alg" => "sha1",
     "private_key_bits" => 2048,
     "private_key_type" => OPENSSL_KEYTYPE_DSA,
     "encrypt_key" => true,

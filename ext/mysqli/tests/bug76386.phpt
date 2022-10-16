@@ -1,9 +1,8 @@
 --TEST--
 Prepared Statement formatter truncates fractional seconds from date/time column (bug #76386)
---EXTENSIONS--
-mysqli
 --SKIPIF--
 <?php
+require_once('skipif.inc');
 require_once('skipifconnectfailure.inc');
 require_once("connect.inc");
 

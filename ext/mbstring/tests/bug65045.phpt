@@ -1,7 +1,7 @@
 --TEST--
 Bug #65045: mb_convert_encoding breaks well-formed character
---EXTENSIONS--
-mbstring
+--SKIPIF--
+<?php extension_loaded('mbstring') or die('skip mbstring not available'); ?>
 --FILE--
 <?php
 

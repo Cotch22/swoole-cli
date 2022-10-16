@@ -24,7 +24,7 @@ class ArrayIteratorEx extends ArrayIterator
                       ,'$this'=>$this));
     }
 
-    function setFlags($flags): void
+    function setFlags($flags)
     {
         echo __METHOD__ . "($flags)\n";
         ArrayIterator::setFlags($flags);
@@ -67,13 +67,13 @@ class ArrayObjectEx extends ArrayObject
         }
     }
 
-    function setFlags($flags): void
+    function setFlags($flags)
     {
         echo __METHOD__ . "($flags)\n";
         ArrayObject::setFlags($flags);
     }
 
-    function getIterator(): Iterator
+    function getIterator()
     {
         echo __METHOD__ . "()\n";
         $it = new ArrayIteratorEx($this, $this->getFlags());

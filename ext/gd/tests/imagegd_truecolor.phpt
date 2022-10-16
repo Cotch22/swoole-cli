@@ -1,7 +1,9 @@
 --TEST--
 imagegd() writes truecolor images without palette conversion
---EXTENSIONS--
-gd
+--SKIPIF--
+<?php
+if (!extension_loaded('gd')) die('skip gd extension not available');
+?>
 --FILE--
 <?php
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'func.inc';

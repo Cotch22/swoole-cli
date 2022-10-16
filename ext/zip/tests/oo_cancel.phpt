@@ -1,10 +1,9 @@
 --TEST--
 registerCancelCallback
---EXTENSIONS--
-zip
 --SKIPIF--
 <?php
 /* $Id$ */
+if(!extension_loaded('zip')) die('skip');
 if (!method_exists('ZipArchive', 'registerCancelCallback')) die('skip libzip too old');
 ?>
 --INI--

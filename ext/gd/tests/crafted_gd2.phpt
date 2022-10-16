@@ -1,7 +1,11 @@
 --TEST--
 Test max colors for a gd image.
---EXTENSIONS--
-gd
+--SKIPIF--
+<?php
+    if (!extension_loaded('gd')) {
+        die("skip gd extension not available\n");
+    }
+?>
 --FILE--
 <?php
 imagecreatefromgd(__DIR__ . '/crafted.gd2');

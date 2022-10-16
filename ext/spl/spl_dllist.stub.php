@@ -1,113 +1,113 @@
 <?php
 
-/** @generate-class-entries */
+/** @generate-function-entries */
 
 class SplDoublyLinkedList implements Iterator, Countable, ArrayAccess, Serializable
 {
-    /** @tentative-return-type */
-    public function add(int $index, mixed $value): void {}
+    /** @return void */
+    public function add(int $index, mixed $value) {}
 
-    /** @tentative-return-type */
-    public function pop(): mixed {}
+    /** @return mixed */
+    public function pop() {}
 
-    /** @tentative-return-type */
-    public function shift(): mixed {}
+    /** @return mixed */
+    public function shift() {}
 
-    /** @tentative-return-type */
-    public function push(mixed $value): void {}
+    /** @return void */
+    public function push(mixed $value) {}
 
-    /** @tentative-return-type */
-    public function unshift(mixed $value): void {}
+    /** @return void */
+    public function unshift(mixed $value) {}
 
-    /** @tentative-return-type */
-    public function top(): mixed {}
+    /** @return mixed */
+    public function top() {}
 
-    /** @tentative-return-type */
-    public function bottom(): mixed {}
+    /** @return mixed */
+    public function bottom() {}
 
-    /** @tentative-return-type */
-    public function __debugInfo(): array {}
+    /** @return array */
+    public function __debugInfo() {}
 
-    /** @tentative-return-type */
-    public function count(): int {}
+    /** @return int */
+    public function count() {}
 
-    /** @tentative-return-type */
-    public function isEmpty(): bool {}
+    /** @return bool */
+    public function isEmpty() {}
 
-    /** @tentative-return-type */
-    public function setIteratorMode(int $mode): int {}
+    /** @return int */
+    public function setIteratorMode(int $mode) {}
 
-    /** @tentative-return-type */
-    public function getIteratorMode(): int {}
-
-    /**
-     * @param int $index
-     * @tentative-return-type
-     */
-    public function offsetExists($index): bool {}
+    /** @return int */
+    public function getIteratorMode() {}
 
     /**
      * @param int $index
-     * @tentative-return-type
+     * @return bool
      */
-    public function offsetGet($index): mixed {}
+    public function offsetExists($index) {}
+
+    /**
+     * @param int $index
+     * @return mixed
+     */
+    public function offsetGet($index) {}
 
     /**
      * @param int|null $index
-     * @tentative-return-type
+     * @return void
      */
-    public function offsetSet($index, mixed $value): void {}
+    public function offsetSet($index, mixed $value) {}
 
     /**
      * @param int $index
-     * @tentative-return-type
+     * @return void
      */
-    public function offsetUnset($index): void {}
+    public function offsetUnset($index) {}
 
-    /** @tentative-return-type */
-    public function rewind(): void {}
+    /** @return void */
+    public function rewind() {}
 
-    /** @tentative-return-type */
-    public function current(): mixed {}
+    /** @return mixed */
+    public function current() {}
 
-    /** @tentative-return-type */
-    public function key(): int {}
+    /** @return int */
+    public function key() {}
 
-    /** @tentative-return-type */
-    public function prev(): void {}
+    /** @return void */
+    public function prev() {}
 
-    /** @tentative-return-type */
-    public function next(): void {}
+    /** @return void */
+    public function next() {}
 
-    /** @tentative-return-type */
-    public function valid(): bool {}
+    /** @return bool */
+    public function valid() {}
 
-    /** @tentative-return-type */
-    public function unserialize(string $data): void {}
+    /** @return void */
+    public function unserialize(string $data) {}
 
-    /** @tentative-return-type */
-    public function serialize(): string {}
+    /** @return string */
+    public function serialize() {}
 
-    /** @tentative-return-type */
-    public function __serialize(): array {}
+    /** @return array */
+    public function __serialize() {}
 
-    /** @tentative-return-type */
-    public function __unserialize(array $data): void {}
+    /** @return void */
+    public function __unserialize(array $data) {}
 }
 
 class SplQueue extends SplDoublyLinkedList
 {
     /**
-     * @tentative-return-type
+     * @return void
      * @implementation-alias SplDoublyLinkedList::push
      */
-    public function enqueue(mixed $value): void {}
+    public function enqueue(mixed $value) {}
 
     /**
-     * @tentative-return-type
+     * @return mixed
      * @implementation-alias SplDoublyLinkedList::shift
      */
-    public function dequeue(): mixed {}
+    public function dequeue() {}
 }
 
 class SplStack extends SplDoublyLinkedList

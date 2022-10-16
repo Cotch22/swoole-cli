@@ -10,6 +10,14 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v3
+      - name: Cache deps
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./pool
+            ./work/opt
+          key: ${{ runner.os }}-4.8.x-8.0.x-r0
       - name: Prepare
         run: |
           php prepare.php
@@ -19,12 +27,14 @@ jobs:
           brew uninstall --ignore-dependencies libomp
           brew install bison automake re2c
           ln -s /usr/local/bin/glibtoolize /usr/local/bin/libtoolize
-          export PATH=/usr/local/opt/bison/bin:$PATH
+          echo 'export PATH="/usr/local/opt/bison/bin:$PATH"' >> /Users/runner/.bash_profile
           chmod +x make.sh
-      - name: Build deps
+      - if: ${{ steps.cache-deps.outputs.cache-hit != 'true' }}
+        name: Build deps
         run: |
           ./make.sh all-library
-          rm -rf ../opt/usr/lib/*.dylib
+      - name: Check deps
+        run: |
           ./make.sh pkg-check
       - name: Run configure
         run: |

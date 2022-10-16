@@ -11,18 +11,12 @@ if (!empty($argv[1])) {
     $p->setOsType(trim($argv[1]));
 }
 
-$p->setPhpSrcDir(__DIR__ . '/php-src-php-8.0.24');
-
 echo `git submodule update --init --recursive`;
 if (!is_dir('pool')) {
     echo `mkdir -p pool/ext pool/lib`;
 }
 if (!is_dir('work')) {
     echo `mkdir -p work/thirdparty`;
-}
-if (!file_exists('php-8.0.24.tar.gz')) {
-    echo `wget https://github.com/php/php-src/archive/refs/tags/php-8.0.24.tar.gz -O php-8.0.24.tar.gz`;
-    echo `tar -xf php-8.0.24.tar.gz`;
 }
 
 $endCallbacks = [];

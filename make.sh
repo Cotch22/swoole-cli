@@ -1,13 +1,13 @@
-SRC=/home/htf/soft/php-8.1.8
+SRC=/Users/caozheyan/swoole-cli/php-src-php-8.0.24
 ROOT=$(pwd)
 export CC=clang
 export CXX=clang++
 export LD=ld.lld
-export PKG_CONFIG_PATH=/usr/libyaml/lib/pkgconfig:/usr/curl/lib/pkgconfig:/usr/imagemagick/lib/pkgconfig:/usr/libwebp/lib/pkgconfig:/usr/freetype/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/libpng/lib/pkgconfig:/usr/gmp/lib/pkgconfig:/usr/openssl/lib/pkgconfig:$PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/Users/caozheyan/swoole-cli/work/opt/usr/openssl/lib/pkgconfig:/Users/caozheyan/swoole-cli/work/opt/usr/lib/pkgconfig:/Users/caozheyan/swoole-cli/work/opt/usr/gmp/lib/pkgconfig:/Users/caozheyan/swoole-cli/work/opt/usr/libpng/lib/pkgconfig:/Users/caozheyan/swoole-cli/work/opt/usr/lib64/pkgconfig:/Users/caozheyan/swoole-cli/work/opt/usr/freetype/lib/pkgconfig:/Users/caozheyan/swoole-cli/work/opt/usr/libwebp/lib/pkgconfig:/Users/caozheyan/swoole-cli/work/opt/usr/imagemagick/lib/pkgconfig:/Users/caozheyan/swoole-cli/work/opt/usr/curl/lib/pkgconfig:/Users/caozheyan/swoole-cli/work/opt/usr/libyaml/lib/pkgconfig:$PKG_CONFIG_PATH
 OPTIONS="--disable-all \
 --with-curl \
---with-iconv=/usr/libiconv \
---with-bz2=/usr/bzip2 \
+--with-iconv=/Users/caozheyan/swoole-cli/work/opt/usr/libiconv \
+--with-bz2=/Users/caozheyan/swoole-cli/work/opt/usr/bzip2 \
 --enable-bcmath \
 --enable-pcntl \
 --enable-filter \
@@ -30,441 +30,441 @@ OPTIONS="--disable-all \
 --with-pdo-sqlite \
 --enable-soap \
 --with-xsl \
---with-gmp=/usr/gmp \
+--with-gmp=/Users/caozheyan/swoole-cli/work/opt/usr/gmp \
 --enable-exif \
 --with-sodium \
---with-openssl=/usr/openssl --with-openssl-dir=/usr/openssl \
+--with-openssl=/Users/caozheyan/swoole-cli/work/opt/usr/openssl --with-openssl-dir=/Users/caozheyan/swoole-cli/work/opt/usr/openssl \
 --enable-xml --enable-simplexml --enable-xmlreader --enable-xmlwriter --enable-dom --with-libxml \
---enable-gd --with-jpeg=/usr --with-freetype=/usr \
+--enable-gd --with-jpeg=/Users/caozheyan/swoole-cli/work/opt/usr --with-freetype=/Users/caozheyan/swoole-cli/work/opt/usr \
 --enable-redis \
---enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares \
---with-yaml=/usr/libyaml \
---with-imagick=/usr/imagemagick \
---enable-inotify \
+--enable-swoole --enable-sockets --enable-mysqlnd --enable-swoole-curl --enable-cares --disable-brotli \
+--with-yaml=/Users/caozheyan/swoole-cli/work/opt/usr/libyaml \
+--with-imagick=/Users/caozheyan/swoole-cli/work/opt/usr/imagemagick \
 "
 
-make_openssl() {
-    cd /work/thirdparty
-    echo "build openssl"
-    mkdir -p /work/thirdparty/openssl && \
-    tar --strip-components=1 -C /work/thirdparty/openssl -xf /work/pool/lib/openssl-1.1.1m.tar.gz  && \
-    cd openssl && \
-    echo  "./config -static --static no-shared --prefix=/usr/openssl"
-        ./config -static --static no-shared --prefix=/usr/openssl && \
-        make -j 8   && \
-    make install
-    cd -
-}
-
-clean_openssl() {
-    cd /work/thirdparty
-    echo "clean openssl"
-    cd /work/thirdparty/openssl && make clean
-    cd -
-}
-
 make_libiconv() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build libiconv"
-    mkdir -p /work/thirdparty/libiconv && \
-    tar --strip-components=1 -C /work/thirdparty/libiconv -xf /work/pool/lib/libiconv-1.16.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/libiconv && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/libiconv -xf /Users/caozheyan/swoole-cli/pool/lib/libiconv-1.16.tar.gz  && \
     cd libiconv && \
-    echo  "./configure --prefix=/usr/libiconv enable_static=yes enable_shared=no"
-        ./configure --prefix=/usr/libiconv enable_static=yes enable_shared=no && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/libiconv enable_static=yes enable_shared=no"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/libiconv enable_static=yes enable_shared=no && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_libiconv() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean libiconv"
-    cd /work/thirdparty/libiconv && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/libiconv && make clean
+    cd -
+}
+
+make_openssl() {
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
+    echo "build openssl"
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/openssl && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/openssl -xf /Users/caozheyan/swoole-cli/pool/lib/openssl-1.1.1p.tar.gz  && \
+    cd openssl && \
+    echo  "./config no-shared --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/openssl"
+        ./config no-shared --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/openssl && \
+        make -j 8   && \
+    make install  && \
+        cd -
+}
+
+clean_openssl() {
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
+    echo "clean openssl"
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/openssl && make clean
     cd -
 }
 
 make_libxml2() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build libxml2"
-    mkdir -p /work/thirdparty/libxml2 && \
-    tar --strip-components=1 -C /work/thirdparty/libxml2 -xf /work/pool/lib/libxml2-v2.9.10.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/libxml2 && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/libxml2 -xf /Users/caozheyan/swoole-cli/pool/lib/libxml2-v2.9.10.tar.gz  && \
     cd libxml2 && \
-    echo  "./autogen.sh && ./configure --prefix=/usr --enable-static=yes --enable-shared=no"
-        ./autogen.sh && ./configure --prefix=/usr --enable-static=yes --enable-shared=no && \
+    echo  "./autogen.sh && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --with-iconv=/Users/caozheyan/swoole-cli/work/opt/usr/libiconv --enable-static=yes --enable-shared=no"
+        ./autogen.sh && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --with-iconv=/Users/caozheyan/swoole-cli/work/opt/usr/libiconv --enable-static=yes --enable-shared=no && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_libxml2() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean libxml2"
-    cd /work/thirdparty/libxml2 && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/libxml2 && make clean
     cd -
 }
 
 make_libxslt() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build libxslt"
-    mkdir -p /work/thirdparty/libxslt && \
-    tar --strip-components=1 -C /work/thirdparty/libxslt -xf /work/pool/lib/libxslt-v1.1.34.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/libxslt && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/libxslt -xf /Users/caozheyan/swoole-cli/pool/lib/libxslt-v1.1.34.tar.gz  && \
     cd libxslt && \
-    echo  "./autogen.sh && ./configure --prefix=/usr --enable-static=yes --enable-shared=no"
-        ./autogen.sh && ./configure --prefix=/usr --enable-static=yes --enable-shared=no && \
+    echo  "./autogen.sh && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static=yes --enable-shared=no"
+        ./autogen.sh && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static=yes --enable-shared=no && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_libxslt() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean libxslt"
-    cd /work/thirdparty/libxslt && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/libxslt && make clean
     cd -
 }
 
 make_gmp() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build gmp"
-    mkdir -p /work/thirdparty/gmp && \
-    tar --strip-components=1 -C /work/thirdparty/gmp -xf /work/pool/lib/gmp-6.2.1.tar.lz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/gmp && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/gmp -xf /Users/caozheyan/swoole-cli/pool/lib/gmp-6.2.1.tar.lz  && \
     cd gmp && \
-    echo  "./configure --prefix=/usr/gmp --enable-static --disable-shared"
-        ./configure --prefix=/usr/gmp --enable-static --disable-shared && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/gmp --enable-static --disable-shared"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/gmp --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_gmp() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean gmp"
-    cd /work/thirdparty/gmp && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/gmp && make clean
     cd -
 }
 
 make_giflib() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build giflib"
-    mkdir -p /work/thirdparty/giflib && \
-    tar --strip-components=1 -C /work/thirdparty/giflib -xf /work/pool/lib/giflib-5.2.1.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/giflib && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/giflib -xf /Users/caozheyan/swoole-cli/pool/lib/giflib-5.2.1.tar.gz  && \
     cd giflib && \
     echo  ""
         make -j 8  libgif.a && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_giflib() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean giflib"
-    cd /work/thirdparty/giflib && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/giflib && make clean
     cd -
 }
 
 make_libpng() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build libpng"
-    mkdir -p /work/thirdparty/libpng && \
-    tar --strip-components=1 -C /work/thirdparty/libpng -xf /work/pool/lib/libpng-1.6.37.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/libpng && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/libpng -xf /Users/caozheyan/swoole-cli/pool/lib/libpng-1.6.37.tar.gz  && \
     cd libpng && \
-    echo  "./configure --prefix=/usr/libpng --enable-static --disable-shared"
-        ./configure --prefix=/usr/libpng --enable-static --disable-shared && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/libpng --enable-static --disable-shared"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/libpng --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_libpng() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean libpng"
-    cd /work/thirdparty/libpng && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/libpng && make clean
     cd -
 }
 
 make_libjpeg() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build libjpeg"
-    mkdir -p /work/thirdparty/libjpeg && \
-    tar --strip-components=1 -C /work/thirdparty/libjpeg -xf /work/pool/lib/libjpeg-turbo-2.1.2.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/libjpeg && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/libjpeg -xf /Users/caozheyan/swoole-cli/pool/lib/libjpeg-turbo-2.1.2.tar.gz  && \
     cd libjpeg && \
-    echo  "cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr ."
-        cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr . && \
+    echo  "cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/Users/caozheyan/swoole-cli/work/opt/usr ."
+        cmake -G"Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/Users/caozheyan/swoole-cli/work/opt/usr . && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        find /Users/caozheyan/swoole-cli/work/opt/usr -name \*.dylib | xargs rm -f && \
+        cd -
 }
 
 clean_libjpeg() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean libjpeg"
-    cd /work/thirdparty/libjpeg && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/libjpeg && make clean
     cd -
 }
 
 make_freetype() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build freetype"
-    mkdir -p /work/thirdparty/freetype && \
-    tar --strip-components=1 -C /work/thirdparty/freetype -xf /work/pool/lib/freetype-2.10.4.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/freetype && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/freetype -xf /Users/caozheyan/swoole-cli/pool/lib/freetype-2.10.4.tar.gz  && \
     cd freetype && \
-    echo  "./configure --prefix=/usr/freetype --enable-static --disable-shared"
-        ./configure --prefix=/usr/freetype --enable-static --disable-shared && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/freetype --enable-static --disable-shared"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/freetype --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_freetype() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean freetype"
-    cd /work/thirdparty/freetype && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/freetype && make clean
     cd -
 }
 
 make_libwebp() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build libwebp"
-    mkdir -p /work/thirdparty/libwebp && \
-    tar --strip-components=1 -C /work/thirdparty/libwebp -xf /work/pool/lib/libwebp-1.2.1.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/libwebp && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/libwebp -xf /Users/caozheyan/swoole-cli/pool/lib/libwebp-1.2.1.tar.gz  && \
     cd libwebp && \
-    echo  "./autogen.sh && ./configure --prefix=/usr/libwebp --enable-static --disable-shared"
-        ./autogen.sh && ./configure --prefix=/usr/libwebp --enable-static --disable-shared && \
+    echo  "./autogen.sh && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/libwebp --enable-static --disable-shared"
+        ./autogen.sh && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/libwebp --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_libwebp() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean libwebp"
-    cd /work/thirdparty/libwebp && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/libwebp && make clean
     cd -
 }
 
 make_sqlite3() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build sqlite3"
-    mkdir -p /work/thirdparty/sqlite3 && \
-    tar --strip-components=1 -C /work/thirdparty/sqlite3 -xf /work/pool/lib/sqlite-autoconf-3370000.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/sqlite3 && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/sqlite3 -xf /Users/caozheyan/swoole-cli/pool/lib/sqlite-autoconf-3370000.tar.gz  && \
     cd sqlite3 && \
-    echo  "./configure --prefix=/usr --enable-static --disable-shared"
-        ./configure --prefix=/usr --enable-static --disable-shared && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_sqlite3() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean sqlite3"
-    cd /work/thirdparty/sqlite3 && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/sqlite3 && make clean
     cd -
 }
 
 make_zlib() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build zlib"
-    mkdir -p /work/thirdparty/zlib && \
-    tar --strip-components=1 -C /work/thirdparty/zlib -xf /work/pool/lib/zlib-1.2.11.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/zlib && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/zlib -xf /Users/caozheyan/swoole-cli/pool/lib/zlib-1.2.11.tar.gz  && \
     cd zlib && \
-    echo  "./configure --prefix=/usr --static"
-        ./configure --prefix=/usr --static && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --static"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --static && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_zlib() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean zlib"
-    cd /work/thirdparty/zlib && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/zlib && make clean
     cd -
 }
 
 make_bzip2() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build bzip2"
-    mkdir -p /work/thirdparty/bzip2 && \
-    tar --strip-components=1 -C /work/thirdparty/bzip2 -xf /work/pool/lib/bzip2-1.0.8.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/bzip2 && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/bzip2 -xf /Users/caozheyan/swoole-cli/pool/lib/bzip2-1.0.8.tar.gz  && \
     cd bzip2 && \
     echo  ""
-        make -j 8  PREFIX=/usr/bzip2 && \
-    make install
-    cd -
+        make -j 8  PREFIX=/Users/caozheyan/swoole-cli/work/opt/usr/bzip2 && \
+    make install PREFIX=/Users/caozheyan/swoole-cli/work/opt/usr/bzip2 && \
+        cd -
 }
 
 clean_bzip2() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean bzip2"
-    cd /work/thirdparty/bzip2 && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/bzip2 && make clean
     cd -
 }
 
 make_icu() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build icu"
-    mkdir -p /work/thirdparty/icu && \
-    tar --strip-components=1 -C /work/thirdparty/icu -xf /work/pool/lib/icu4c-60_3-src.tgz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/icu && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/icu -xf /Users/caozheyan/swoole-cli/pool/lib/icu4c-60_3-src.tgz  && \
     cd icu && \
-    echo  "source/runConfigureICU Linux --prefix=/usr --enable-static --disable-shared"
-        source/runConfigureICU Linux --prefix=/usr --enable-static --disable-shared && \
+    echo  "source/runConfigureICU Linux --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared"
+        source/runConfigureICU Linux --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_icu() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean icu"
-    cd /work/thirdparty/icu && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/icu && make clean
     cd -
 }
 
 make_oniguruma() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build oniguruma"
-    mkdir -p /work/thirdparty/oniguruma && \
-    tar --strip-components=1 -C /work/thirdparty/oniguruma -xf /work/pool/lib/oniguruma-6.9.7.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/oniguruma && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/oniguruma -xf /Users/caozheyan/swoole-cli/pool/lib/oniguruma-6.9.7.tar.gz  && \
     cd oniguruma && \
-    echo  "./autogen.sh && ./configure --prefix=/usr --enable-static --disable-shared"
-        ./autogen.sh && ./configure --prefix=/usr --enable-static --disable-shared && \
+    echo  "./autogen.sh && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared"
+        ./autogen.sh && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_oniguruma() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean oniguruma"
-    cd /work/thirdparty/oniguruma && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/oniguruma && make clean
     cd -
 }
 
 make_zip() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build zip"
-    mkdir -p /work/thirdparty/zip && \
-    tar --strip-components=1 -C /work/thirdparty/zip -xf /work/pool/lib/libzip-1.8.0.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/zip && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/zip -xf /Users/caozheyan/swoole-cli/pool/lib/libzip-1.8.0.tar.gz  && \
     cd zip && \
-    echo  "cmake . -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/usr"
-        cmake . -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/usr && \
+    echo  "cmake . -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/Users/caozheyan/swoole-cli/work/opt/usr"
+        cmake . -DBUILD_SHARED_LIBS=OFF -DOPENSSL_USE_STATIC_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/Users/caozheyan/swoole-cli/work/opt/usr && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_zip() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean zip"
-    cd /work/thirdparty/zip && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/zip && make clean
     cd -
 }
 
 make_cares() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build cares"
-    mkdir -p /work/thirdparty/cares && \
-    tar --strip-components=1 -C /work/thirdparty/cares -xf /work/pool/lib/c-ares-1.18.1.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/cares && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/cares -xf /Users/caozheyan/swoole-cli/pool/lib/c-ares-1.18.1.tar.gz  && \
     cd cares && \
-    echo  "./configure --prefix=/usr --enable-static --disable-shared"
-        ./configure --prefix=/usr --enable-static --disable-shared && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_cares() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean cares"
-    cd /work/thirdparty/cares && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/cares && make clean
     cd -
 }
 
 make_imagemagick() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build imagemagick"
-    mkdir -p /work/thirdparty/imagemagick && \
-    tar --strip-components=1 -C /work/thirdparty/imagemagick -xf /work/pool/lib/7.1.0-19.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/imagemagick && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/imagemagick -xf /Users/caozheyan/swoole-cli/pool/lib/7.1.0-19.tar.gz  && \
     cd imagemagick && \
-    echo  "./configure --prefix=/usr/imagemagick --with-zip=no --enable-static --disable-shared"
-        ./configure --prefix=/usr/imagemagick --with-zip=no --enable-static --disable-shared && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/imagemagick --enable-static --disable-shared --with-zip=no --with-fontconfig=no --with-heic=no --with-lcms=no --with-lqr=no --with-openexr=no --with-openjp2=no --with-pango=no --with-raw=no --with-tiff=no"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/imagemagick --enable-static --disable-shared --with-zip=no --with-fontconfig=no --with-heic=no --with-lcms=no --with-lqr=no --with-openexr=no --with-openjp2=no --with-pango=no --with-raw=no --with-tiff=no && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_imagemagick() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean imagemagick"
-    cd /work/thirdparty/imagemagick && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/imagemagick && make clean
     cd -
 }
 
 make_curl() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build curl"
-    mkdir -p /work/thirdparty/curl && \
-    tar --strip-components=1 -C /work/thirdparty/curl -xf /work/pool/lib/curl-7.80.0.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/curl && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/curl -xf /Users/caozheyan/swoole-cli/pool/lib/curl-7.80.0.tar.gz  && \
     cd curl && \
-    echo  "autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared --with-openssl=/usr/openssl --without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"
-        autoreconf -fi && ./configure --prefix=/usr/curl --enable-static --disable-shared --with-openssl=/usr/openssl --without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3 && \
+    echo  "autoreconf -fi && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/curl --enable-static --disable-shared --with-openssl=/Users/caozheyan/swoole-cli/work/opt/usr/openssl --without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3"
+        autoreconf -fi && ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/curl --enable-static --disable-shared --with-openssl=/Users/caozheyan/swoole-cli/work/opt/usr/openssl --without-librtmp --without-brotli --without-libidn2 --disable-ldap --disable-rtsp --without-zstd --without-nghttp2 --without-nghttp3 && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_curl() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean curl"
-    cd /work/thirdparty/curl && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/curl && make clean
     cd -
 }
 
 make_libsodium() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build libsodium"
-    mkdir -p /work/thirdparty/libsodium && \
-    tar --strip-components=1 -C /work/thirdparty/libsodium -xf /work/pool/lib/libsodium-1.0.18.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/libsodium && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/libsodium -xf /Users/caozheyan/swoole-cli/pool/lib/libsodium-1.0.18.tar.gz  && \
     cd libsodium && \
-    echo  "./configure --prefix=/usr --enable-static --disable-shared"
-        ./configure --prefix=/usr --enable-static --disable-shared && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_libsodium() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean libsodium"
-    cd /work/thirdparty/libsodium && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/libsodium && make clean
     cd -
 }
 
 make_libyaml() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "build libyaml"
-    mkdir -p /work/thirdparty/libyaml && \
-    tar --strip-components=1 -C /work/thirdparty/libyaml -xf /work/pool/lib/yaml-0.2.5.tar.gz  && \
+    mkdir -p /Users/caozheyan/swoole-cli/work/thirdparty/libyaml && \
+    tar --strip-components=1 -C /Users/caozheyan/swoole-cli/work/thirdparty/libyaml -xf /Users/caozheyan/swoole-cli/pool/lib/yaml-0.2.5.tar.gz  && \
     cd libyaml && \
-    echo  "./configure --prefix=/usr/libyaml --enable-static --disable-shared"
-        ./configure --prefix=/usr/libyaml --enable-static --disable-shared && \
+    echo  "./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/libyaml --enable-static --disable-shared"
+        ./configure --prefix=/Users/caozheyan/swoole-cli/work/opt/usr/libyaml --enable-static --disable-shared && \
         make -j 8   && \
-    make install
-    cd -
+    make install  && \
+        cd -
 }
 
 clean_libyaml() {
-    cd /work/thirdparty
+    cd /Users/caozheyan/swoole-cli/work/thirdparty
     echo "clean libyaml"
-    cd /work/thirdparty/libyaml && make clean
+    cd /Users/caozheyan/swoole-cli/work/thirdparty/libyaml && make clean
     cd -
 }
 
 
 make_all_library() {
-    make_openssl && echo "[SUCCESS] make openssl"
     make_libiconv && echo "[SUCCESS] make libiconv"
+    make_openssl && echo "[SUCCESS] make openssl"
     make_libxml2 && echo "[SUCCESS] make libxml2"
     make_libxslt && echo "[SUCCESS] make libxslt"
     make_gmp && echo "[SUCCESS] make gmp"
@@ -489,10 +489,6 @@ make_all_library() {
 config_php() {
     rm ./configure
     ./buildconf --force
-    mv main/php_config.h.in /tmp/cnt
-    echo -ne '#ifndef __PHP_CONFIG_H\n#define __PHP_CONFIG_H\n' > main/php_config.h.in
-    cat /tmp/cnt >> main/php_config.h.in
-    echo -ne '\n#endif\n' >> main/php_config.h.in
     echo $OPTIONS
     echo $PKG_CONFIG_PATH
     ./configure $OPTIONS
@@ -500,7 +496,7 @@ config_php() {
 
 make_php() {
     make EXTRA_CFLAGS='-fno-ident -Xcompiler -march=nehalem -Xcompiler -mtune=haswell -Os' \
-    EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident  -L/usr/openssl/lib -L/usr/libiconv/lib -L/usr/gmp/lib -L/usr/libpng/lib -L/usr/lib64 -L/usr/freetype/lib -L/usr/libwebp/lib -L/usr/bzip2/lib -L/usr/imagemagick/lib -L/usr/curl/lib -L/usr/libyaml/lib '  -j 8 && echo ""
+    EXTRA_LDFLAGS_PROGRAM='-all-static -fno-ident -framework CoreFoundation -framework SystemConfiguration -undefined dynamic_lookup -lwebp -licudata -licui18n -licuio -L/Users/caozheyan/swoole-cli/work/opt/usr/libiconv/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/openssl/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/gmp/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/libpng/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib64 -L/Users/caozheyan/swoole-cli/work/opt/usr/freetype/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/libwebp/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/bzip2/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/imagemagick/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/curl/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/lib -L/Users/caozheyan/swoole-cli/work/opt/usr/libyaml/lib '  -j 8 && echo ""
 }
 
 help() {
@@ -514,20 +510,20 @@ help() {
 }
 
 if [ "$1" = "docker-build" ] ;then
-  sudo docker build -t phpswoole/swoole_cli_os:1.4 .
+  sudo docker build -t phpswoole/swoole_cli_os:latest .
 elif [ "$1" = "docker-bash" ] ;then
-    sudo docker run -it -v $ROOT:/work -v /home/htf/workspace/swoole:/work/ext/swoole phpswoole/swoole_cli_os:1.4 /bin/bash
+    sudo docker run -it -v $ROOT:/Users/caozheyan/swoole-cli/work -v ext/swoole:/Users/caozheyan/swoole-cli/work/ext/swoole phpswoole/swoole_cli_os:latest /bin/bash
     exit 0
 elif [ "$1" = "all-library" ] ;then
     make_all_library
-elif [ "$1" = "openssl" ] ;then
-    make_openssl && echo "[SUCCESS] make openssl"
-elif [ "$1" = "clean-openssl" ] ;then
-    clean_openssl && echo "[SUCCESS] make clean openssl"
 elif [ "$1" = "libiconv" ] ;then
     make_libiconv && echo "[SUCCESS] make libiconv"
 elif [ "$1" = "clean-libiconv" ] ;then
     clean_libiconv && echo "[SUCCESS] make clean libiconv"
+elif [ "$1" = "openssl" ] ;then
+    make_openssl && echo "[SUCCESS] make openssl"
+elif [ "$1" = "clean-openssl" ] ;then
+    clean_openssl && echo "[SUCCESS] make clean openssl"
 elif [ "$1" = "libxml2" ] ;then
     make_libxml2 && echo "[SUCCESS] make libxml2"
 elif [ "$1" = "clean-libxml2" ] ;then
@@ -617,8 +613,8 @@ elif [ "$1" = "archive" ] ;then
     mv ${SWOOLE_CLI_FILE} ../
     cd -
 elif [ "$1" = "clean-all-library" ] ;then
-    clean_openssl && echo "[SUCCESS] make clean [openssl]"
     clean_libiconv && echo "[SUCCESS] make clean [libiconv]"
+    clean_openssl && echo "[SUCCESS] make clean [openssl]"
     clean_libxml2 && echo "[SUCCESS] make clean [libxml2]"
     clean_libxslt && echo "[SUCCESS] make clean [libxslt]"
     clean_gmp && echo "[SUCCESS] make clean [gmp]"
@@ -641,11 +637,11 @@ elif [ "$1" = "clean-all-library" ] ;then
 elif [ "$1" = "diff-configure" ] ;then
   meld $SRC/configure.ac ./configure.ac
 elif [ "$1" = "pkg-check" ] ;then
-    echo "[openssl]"
-    pkg-config --libs openssl
-    echo "==========================================================="
     echo "[libiconv]"
     pkg-config --libs libiconv
+    echo "==========================================================="
+    echo "[openssl]"
+    pkg-config --libs openssl
     echo "==========================================================="
     echo "[libxml2]"
     pkg-config --libs libxml-2.0
@@ -666,7 +662,7 @@ elif [ "$1" = "pkg-check" ] ;then
     pkg-config --libs libjpeg
     echo "==========================================================="
     echo "[freetype]"
-    pkg-config --libs freetyp2
+    pkg-config --libs freetype2
     echo "==========================================================="
     echo "[libwebp]"
     pkg-config --libs libwebp
@@ -705,64 +701,64 @@ elif [ "$1" = "pkg-check" ] ;then
     pkg-config --libs yaml-0.1
     echo "==========================================================="
 elif [ "$1" = "sync" ] ;then
-  echo "sync"
-  # ZendVM
-  cp -r $SRC/Zend ./
-  # Extension
-  cp -r $SRC/ext/bcmath/ ./ext
-  cp -r $SRC/ext/bz2/ ./ext
-  cp -r $SRC/ext/calendar/ ./ext
-  cp -r $SRC/ext/ctype/ ./ext
-  cp -r $SRC/ext/curl/ ./ext
-  cp -r $SRC/ext/date/ ./ext
-  cp -r $SRC/ext/dom/ ./ext
-  cp -r $SRC/ext/exif/ ./ext
-  cp -r $SRC/ext/fileinfo/ ./ext
-  cp -r $SRC/ext/filter/ ./ext
-  cp -r $SRC/ext/gd/ ./ext
-  cp -r $SRC/ext/gettext/ ./ext
-  cp -r $SRC/ext/gmp/ ./ext
-  cp -r $SRC/ext/hash/ ./ext
-  cp -r $SRC/ext/iconv/ ./ext
-  cp -r $SRC/ext/intl/ ./ext
-  cp -r $SRC/ext/json/ ./ext
-  cp -r $SRC/ext/libxml/ ./ext
-  cp -r $SRC/ext/mbstring/ ./ext
-  cp -r $SRC/ext/mysqli/ ./ext
-  cp -r $SRC/ext/mysqlnd/ ./ext
-  cp -r $SRC/ext/opcache/ ./ext
-  cp -r $SRC/ext/openssl/ ./ext
-  cp -r $SRC/ext/pcntl/ ./ext
-  cp -r $SRC/ext/pcre/ ./ext
-  cp -r $SRC/ext/pdo/ ./ext
-  cp -r $SRC/ext/pdo_mysql/ ./ext
-  cp -r $SRC/ext/pdo_sqlite/ ./ext
-  cp -r $SRC/ext/phar/ ./ext
-  cp -r $SRC/ext/posix/ ./ext
-  cp -r $SRC/ext/readline/ ./ext
-  cp -r $SRC/ext/reflection/ ./ext
-  cp -r $SRC/ext/session/ ./ext
-  cp -r $SRC/ext/simplexml/ ./ext
-  cp -r $SRC/ext/soap/ ./ext
-  cp -r $SRC/ext/sockets/ ./ext
-  cp -r $SRC/ext/sodium/ ./ext
-  cp -r $SRC/ext/spl/ ./ext
-  cp -r $SRC/ext/sqlite3/ ./ext
-  cp -r $SRC/ext/standard/ ./ext
-  cp -r $SRC/ext/sysvshm/ ./ext
-  cp -r $SRC/ext/tokenizer/ ./ext
-  cp -r $SRC/ext/xml/ ./ext
-  cp -r $SRC/ext/xmlreader/ ./ext
-  cp -r $SRC/ext/xmlwriter/ ./ext
-  cp -r $SRC/ext/xsl/ ./ext
-  cp -r $SRC/ext/zip/ ./ext
-  cp -r $SRC/ext/zlib/ ./ext
-  # main
-  cp -r $SRC/main ./
-  cp -r $SRC/build ./
-  cp -r ./TSRM/TSRM.h main/TSRM.h
-  cp -r $SRC/configure.ac ./
-  exit 0
+    echo "sync"
+    # ZendVM
+    cp -r $SRC/Zend ./
+    # Extension
+    cp -r $SRC/ext/bcmath ./ext/
+    cp -r $SRC/ext/bz2 ./ext/
+    cp -r $SRC/ext/calendar ./ext/
+    cp -r $SRC/ext/ctype ./ext/
+    cp -r $SRC/ext/curl ./ext/
+    cp -r $SRC/ext/date ./ext/
+    cp -r $SRC/ext/dom ./ext/
+    cp -r $SRC/ext/exif ./ext/
+    cp -r $SRC/ext/fileinfo ./ext/
+    cp -r $SRC/ext/filter ./ext/
+    cp -r $SRC/ext/gd ./ext/
+    cp -r $SRC/ext/gettext ./ext/
+    cp -r $SRC/ext/gmp ./ext/
+    cp -r $SRC/ext/hash ./ext/
+    cp -r $SRC/ext/iconv ./ext/
+    cp -r $SRC/ext/intl ./ext/
+    cp -r $SRC/ext/json ./ext/
+    cp -r $SRC/ext/libxml ./ext/
+    cp -r $SRC/ext/mbstring ./ext/
+    cp -r $SRC/ext/mysqli ./ext/
+    cp -r $SRC/ext/mysqlnd ./ext/
+    cp -r $SRC/ext/opcache ./ext/
+    cp -r $SRC/ext/openssl ./ext/
+    cp -r $SRC/ext/pcntl ./ext/
+    cp -r $SRC/ext/pcre ./ext/
+    cp -r $SRC/ext/pdo ./ext/
+    cp -r $SRC/ext/pdo_mysql ./ext/
+    cp -r $SRC/ext/pdo_sqlite ./ext/
+    cp -r $SRC/ext/phar ./ext/
+    cp -r $SRC/ext/posix ./ext/
+    cp -r $SRC/ext/readline ./ext/
+    cp -r $SRC/ext/reflection ./ext/
+    cp -r $SRC/ext/session ./ext/
+    cp -r $SRC/ext/simplexml ./ext/
+    cp -r $SRC/ext/soap ./ext/
+    cp -r $SRC/ext/sockets ./ext/
+    cp -r $SRC/ext/sodium ./ext/
+    cp -r $SRC/ext/spl ./ext/
+    cp -r $SRC/ext/sqlite3 ./ext/
+    cp -r $SRC/ext/standard ./ext/
+    cp -r $SRC/ext/sysvshm ./ext/
+    cp -r $SRC/ext/tokenizer ./ext/
+    cp -r $SRC/ext/xml ./ext/
+    cp -r $SRC/ext/xmlreader ./ext/
+    cp -r $SRC/ext/xmlwriter ./ext/
+    cp -r $SRC/ext/xsl ./ext/
+    cp -r $SRC/ext/zip ./ext/
+    cp -r $SRC/ext/zlib ./ext/
+    # main
+    cp -r $SRC/main ./
+    cp -r $SRC/build ./
+    cp -r ./TSRM/TSRM.h main/TSRM.h
+    cp -r $SRC/configure.ac ./
+    exit 0
 else
     help
 fi

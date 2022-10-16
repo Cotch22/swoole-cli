@@ -296,6 +296,8 @@ tmp-php.ini
 /.project
 /.cproject
 /.vscode
+/make.sh
+/php-*/
 /pool/
 /work/
 /thirdparty
@@ -305,3 +307,4 @@ tmp-php.ini
 /ext/yaml
 /ext/mongodb
 /ext/inotify
+/ext/protobuf

@@ -157,7 +157,7 @@ class Preprocessor
     protected array $pkgConfigPaths = [];
     protected string $phpSrcDir;
     protected string $dockerVersion = 'latest';
-    protected string $swooleDir;
+    protected string $swooleDir = 'ext/swoole';
     protected string $workDir = '/work';
     protected string $extraLdflags = '';
     protected string $extraOptions = '';

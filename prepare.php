@@ -7,11 +7,22 @@ use SwooleCli\Library;
 use SwooleCli\Extension;
 
 $p = new Preprocessor(__DIR__);
-$p->setPhpSrcDir('/home/htf/soft/php-8.1.8');
-$p->setDockerVersion('1.4');
-$p->setSwooleDir('/home/htf/workspace/swoole');
 if (!empty($argv[1])) {
     $p->setOsType(trim($argv[1]));
+}
+
+$p->setPhpSrcDir(__DIR__ . '/php-src-php-8.0.24');
+
+echo `git submodule update --init --recursive`;
+if (!is_dir('pool')) {
+    echo `mkdir -p pool/ext pool/lib`;
+}
+if (!is_dir('work')) {
+    echo `mkdir -p work/thirdparty`;
+}
+if (!file_exists('php-8.0.24.tar.gz')) {
+    echo `wget https://github.com/php/php-src/archive/refs/tags/php-8.0.24.tar.gz -O php-8.0.24.tar.gz`;
+    echo `tar -xf php-8.0.24.tar.gz`;
 }
 
 $endCallbacks = [];
@@ -457,6 +468,16 @@ $extCallback = [
             echo `find ext/protobuf/ -name \*.bak | xargs rm -f`;
         } else {
             echo `sed -i 's/arginfo_void,/arginfo_void_protobuf,/g' ext/protobuf/*.c ext/protobuf/*.h ext/protobuf/*.inc`;
+        }
+    },
+    'swoole' => function ($p) {
+        // only PHP 8.0.x
+        // compatible with curl
+        if ($p->osType === 'macos') {
+            echo `sed -i '.bak' 's/void curl_multi_register_class/void curl_multi_register_handlers/' ext/swoole/thirdparty/php/curl/multi.cc`;
+            echo `rm -rf ext/swoole/thirdparty/php/curl/multi.cc.bak`;
+        } else {
+            echo `sed -i 's/void curl_multi_register_class/void curl_multi_register_handlers/' ext/swoole/thirdparty/php/curl/multi.cc`;
         }
     }
 ];

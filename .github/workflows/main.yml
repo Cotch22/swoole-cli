@@ -50,8 +50,8 @@ jobs:
       - name: Run package
         run: |
           cd bin
-          tar czvf swoole-cli-${{ runner.os }}-x64-${{ github.ref }}.tar.gz LICENSE swoole-cli
+          tar czvf swoole-cli-${{ runner.os }}-x64-${{ github.ref_name }}.tar.gz LICENSE swoole-cli
       - uses: actions/upload-artifact@v3
         with:
           name: swoole-cli-${{ runner.os }}-${{ github.sha }}
-          path: bin/swoole-cli-${{ runner.os }}-x64-${{ github.ref }}.tar.gz
+          path: bin/swoole-cli-${{ runner.os }}-x64-${{ github.ref_name }}.tar.gz
